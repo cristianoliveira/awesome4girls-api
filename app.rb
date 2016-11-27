@@ -14,7 +14,7 @@ class App
   # Define Routes
   def self.routes
     {
-      '/users' => UserController,
+      '/users' => UsersController,
     }
   end
 

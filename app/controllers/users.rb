@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UserController < Sinatra::Base
+class UsersController < Sinatra::Base
   register Sinatra::BasicAuth
   register Sinatra::ErrorsHandler
   helpers Sinatra::Param
