@@ -37,6 +37,25 @@ describe 'UsersController', type: :controller do
       it { expect(last_response.content_type).to eq 'application/json' }
       it { expect(last_response.status).to be(200) }
       it { expect(data).to_not include('error') }
+      it { expect(data.size).to eq(1) }
     end
+  end
+
+  describe 'adding users' do
+      before {
+        create(:admin, name: 'jonh', password: "123")
+        basic_authorize 'jonh', '123'
+        post '/users', { name: "roy", password: "123123", role: 1}
+      }
+
+      let(:data) { JSON.parse(last_response.body) }
+
+      it { expect(last_response.content_type).to eq 'application/json' }
+      it { expect(last_response.status).to be(200) }
+      it { expect(data).to_not include('error') }
+      it "contains user created" do
+        get '/users'
+        expect(last_response.body).to include('roy')
+      end
   end
 end

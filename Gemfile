@@ -21,4 +21,6 @@ group :development, :test do
   # test data
   gem 'factory_girl'
   gem 'faker'
+  gem 'database_cleaner'
+
 end
