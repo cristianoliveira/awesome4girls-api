@@ -1,4 +1,4 @@
-.PHONY: run setup
+.PHONY: run setup test
 
 setup:
 	@gem install bundle
@@ -7,3 +7,6 @@ setup:
 
 run:
 	@bundle exec rackup -p 3000
+
+test:
+	bundle exec rspec
