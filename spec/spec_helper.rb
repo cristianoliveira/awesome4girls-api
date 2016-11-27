@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 ENV['RACK_ENV'] ||= 'test'
 
 # Require API Application
-require File.join(File.dirname(__FILE__),'..', 'app')
+require File.join(File.dirname(__FILE__), '..', 'app')
 
 # Rack Test
 require 'rack/test'
@@ -9,9 +11,11 @@ require 'rack/test'
 require 'factory_girl'
 require 'database_cleaner'
 
-require "json"
+require 'json'
 
-FactoryGirl.definition_file_paths = [ File.join(File.dirname(__FILE__), 'factories') ]
+FactoryGirl.definition_file_paths = [
+  File.join(File.dirname(__FILE__), 'factories')
+]
 DatabaseCleaner.strategy = :truncation
 
 RSpec.configure do |config|

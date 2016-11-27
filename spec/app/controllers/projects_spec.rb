@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'ProjectsController', type: :controller do
@@ -13,12 +14,12 @@ describe 'ProjectsController', type: :controller do
       end
 
       describe 'create projects' do
-        before { post '/projects', { title: 'baz', description: 'foo'} }
+        before { post '/projects', title: 'baz', description: 'foo' }
         let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
-        it { expect(data).to eq({'errors'=>'Basic Authentication not provided.'}) }
+        it { expect(data).to eq('errors' => 'Basic Authentication not provided.') }
       end
 
       describe 'delete projects' do
@@ -31,12 +32,12 @@ describe 'ProjectsController', type: :controller do
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
-        it { expect(data).to eq({'errors'=>'Basic Authentication not provided.'}) }
+        it { expect(data).to eq('errors' => 'Basic Authentication not provided.') }
       end
 
       context 'with wrong credentials' do
         before do
-          user = create(:admin, name: 'jonh', password: '123')
+          create(:admin, name: 'jonh', password: '123')
           basic_authorize 'jonh', '123qweqweq'
         end
 
@@ -50,12 +51,12 @@ describe 'ProjectsController', type: :controller do
         end
 
         describe 'create projects' do
-          before { post '/projects', { title: 'roy', description: 'foo'} }
+          before { post '/projects', title: 'roy', description: 'foo' }
           let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
-          it { expect(data).to eq({'errors'=>'User not authorized.'}) }
+          it { expect(data).to eq('errors' => 'User not authorized.') }
         end
 
         describe 'delete projects' do
@@ -68,8 +69,8 @@ describe 'ProjectsController', type: :controller do
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
-          it { expect(data).to eq({'errors'=>'User not authorized.'}) }
-          it "does not delete project" do
+          it { expect(data).to eq('errors' => 'User not authorized.') }
+          it 'does not delete project' do
             get '/projects'
             expect(last_response.body).to include('fooproject')
           end
@@ -102,10 +103,7 @@ describe 'ProjectsController', type: :controller do
 
     context 'passing required params' do
       before do
-        post '/projects',
-          { title: 'fooproject',
-            description: 'some foo',
-            subsection: @subsection.id }
+        post '/projects', title: 'fooproject', description: 'some foo', subsection: @subsection.id
       end
 
       let(:data) { JSON.parse(last_response.body) }
@@ -129,23 +127,20 @@ describe 'ProjectsController', type: :controller do
       let(:data) { JSON.parse(last_response.body) }
 
       it 'validates title' do
-        post '/projects', { description: '123123' }
+        post '/projects', description: '123123'
         expect(last_response.status).to eq 400
         expect(data).to include('errors')
       end
 
       it 'validates description' do
-        post '/projects', { title: 'foo', subsection: @subsection.id }
+        post '/projects', title: 'foo', subsection: @subsection.id
         expect(last_response.status).to eq 400
         expect(data).to include('errors')
       end
 
       it 'accepts empty languages' do
-        post '/projects', {
-          title: 'foo',
-          description: 'foodescription',
-          subsection: @subsection.id
-        }
+        post '/projects', title: 'foo', description: 'foodescription', subsection: @subsection.id
+
         expect(last_response.status).to eq 200
         expect(data).to_not include('errors')
       end
@@ -174,7 +169,7 @@ describe 'ProjectsController', type: :controller do
     end
 
     it 'validates the author when common user' do
-      bob = create(:user, name: 'bob', password: '123')
+      create(:user, name: 'bob', password: '123')
       basic_authorize 'bob', '123'
       jonh_project = create(:project, author_id: @jonh.id)
       delete "/projects/#{jonh_project.id}"
@@ -185,7 +180,7 @@ describe 'ProjectsController', type: :controller do
     end
 
     it 'accepts deletion of others when admin' do
-      bob = create(:admin, name: 'bob', password: '123')
+      create(:admin, name: 'bob', password: '123')
       basic_authorize 'bob', '123'
       jonh_project = create(:project, author_id: @jonh.id)
       delete "/projects/#{jonh_project.id}"

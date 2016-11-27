@@ -1,25 +1,31 @@
 # frozen_string_literal: true
 
 module Sinatra
+  # Sinatra extencion to implement custo basic auth
+  #
   module BasicAuth
-    class AuthenticationError < Exception
+    # Represents and Authentication error.
+    # It occours when has an attempt to access on restricted endpoint
+    # without correct credentials
+    #
+    class AuthenticationError < RuntimeError
     end
 
+    # Injects authentication helpers methods.
+    #
     module Helpers
-      def authorize!(realm, &block)
-        headers "WWW-Authenticate" => %[Basic realm="#{realm}"]
+      def authorize!(realm)
+        headers 'WWW-Authenticate' => %(Basic realm="#{realm}")
         auth =  Rack::Auth::Basic::Request.new(request.env)
 
-        unless auth.provided? and auth.basic? and auth.credentials
-          raise AuthenticationError, "Basic Authentication not provided."
+        unless auth.provided? && auth.basic? && auth.credentials
+          raise AuthenticationError, 'Basic Authentication not provided.'
         end
 
         name, password = auth.credentials
 
-        authorized = block.call(name, password)
-        unless authorized
-          raise AuthenticationError, "User not authorized."
-        end
+        authorized = yield(name, password)
+        raise AuthenticationError, 'User not authorized.' unless authorized
       end
     end
 

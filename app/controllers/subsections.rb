@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Responsible for implementing subsection endpoints
+#
 class SubsectionsController < Sinatra::Base
   register Sinatra::BasicAuth
   register Sinatra::ErrorsHandler
@@ -13,7 +15,7 @@ class SubsectionsController < Sinatra::Base
   get '/:sectionid/subsections/:id' do
     section = Section.find(params[:sectionid])
     subsection = section.subsections.find(params[:id])
-    json({ type: :subsection, data: subsection })
+    json(type: :subsection, data: subsection)
   end
 
   # GET /section/1/subsections
@@ -33,9 +35,9 @@ class SubsectionsController < Sinatra::Base
                                          description: params[:description])
 
     if subsection.save
-      json({ message: "Subsection created."})
+      json(message: 'Subsection created.')
     else
-      halt 400, json({ error: section.errors.full_messages })
+      halt 400, json(error: section.errors.full_messages)
     end
   end
 
@@ -47,17 +49,18 @@ class SubsectionsController < Sinatra::Base
     subsection = section.subsections.find(params[:id])
 
     if subsection.destroy
-      json({ message: "Subsection deleted."})
+      json(message: 'Subsection deleted.')
     else
-      halt 400, json({ error: section.errors.full_messages })
+      halt 400, json(error: section.errors.full_messages)
     end
   end
 
   private
+
   def restricted_to_users!
-    authorize!("users") { |name, pass|
+    authorize!('users') do |name, pass|
       user = User.find_by_name(name)
-      user and user.auth?(pass) and user.is_a?(User::ROLE_USER)
-    }
+      user && user.auth?(pass) && user.is_a?(User::ROLE_USER)
+    end
   end
 end

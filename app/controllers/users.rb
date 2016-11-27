@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Responsible expose the user endpoints
+#
 class UsersController < Sinatra::Base
   register Sinatra::BasicAuth
   register Sinatra::ErrorsHandler
@@ -7,21 +9,21 @@ class UsersController < Sinatra::Base
 
   before do
     content_type :json
-    authorize!('admin') { |name, pass|
+    authorize!('admin') do |name, pass|
       user = User.find_by_name(name)
-      user and user.auth?(pass) and user.is_a?(User::ROLE_ADMIN)
-    }
+      user && user.auth?(pass) && user.is_a?(User::ROLE_ADMIN)
+    end
   end
 
   # GET /users/1
   get '/:id' do
     user = User.find(params[:id])
-    json({ type: :user, data: user })
+    json(type: :user, data: user)
   end
 
   # GET /users
   get '/' do
-    json User.all()
+    json User.all
   end
 
   # POST /users?name=bob&password=123&role=1
@@ -33,9 +35,9 @@ class UsersController < Sinatra::Base
     user = User.new(params)
 
     if user.save
-      json({ message: 'User created.'})
+      json(message: 'User created.')
     else
-      halt 400, json({ errors: user.errors.full_messages })
+      halt 400, json(errors: user.errors.full_messages)
     end
   end
 
@@ -44,9 +46,9 @@ class UsersController < Sinatra::Base
     user = User.find(params[:id])
 
     if user.destroy
-      json({ message: 'User deleted.'})
+      json(message: 'User deleted.')
     else
-      halt 400, json({ errors: user.errors.full_messages })
+      halt 400, json(errors: user.errors.full_messages)
     end
   end
 end

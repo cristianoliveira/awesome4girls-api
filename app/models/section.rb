@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: sections
@@ -9,6 +10,13 @@
 #  updated_at  :datetime         not null
 #
 
+# A Section is the highest division
+#
+# Ex:
+#   Meetup <-- Secion
+#     Ruby <-- Subsection
+#       RailsGirls <-- Project
+#
 class Section < ActiveRecord::Base
   has_many :subsections
 end

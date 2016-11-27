@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: projects
@@ -12,24 +13,41 @@
 #  author_id     :integer
 #
 
-
+# The project has the details of the event/group/project.
+#
+# Ex:
+#   Meetup <-- Secion
+#     Ruby <-- Subsection
+#       RailsGirls <-- Project
+#         description: An event that brings women to the tech.
+#
 class Project < ActiveRecord::Base
   belongs_to :subsection
-  belongs_to :author, class_name: "User"
+  belongs_to :author, class_name: 'User'
 
   validates :title, presence: true
   validates :description, presence: true
   validates :language, length: {
     maximum: 2,
     allow_nil: true,
-    message: "Languages must be ISO639-1 code standard. Ex: en, pt"
+    message: 'Languages must be ISO639-1 code standard. Ex: en, pt'
   }
 
+  # It validates who are destroying the record ensuring
+  # that only allowed person can delete it.
+  #
+  # == Parameters:
+  # user:: The user that is trying delete the record
+  #
+  # == Returns:
+  # A boolean that responds if was possible delete it.
+  #
   def destroy_by(user)
-    unless self.author_id == user.id or user.is_a?(User::ROLE_ADMIN)
+    unless author_id == user.id || user.is_a?(User::ROLE_ADMIN)
       errors.add(:not_allowed, 'Cannot delete projects from other author')
       return false
     end
-    self.destroy
+
+    destroy
   end
 end

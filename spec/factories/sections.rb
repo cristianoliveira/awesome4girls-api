@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 # == Schema Information
 #
 # Table name: sections
@@ -9,10 +11,9 @@
 #  updated_at  :datetime         not null
 #
 
-
 FactoryGirl.define do
   factory :section, class: Section do
-    title "some title"
-    description "some awesome description"
+    title 'some title'
+    description 'some awesome description'
   end
 end

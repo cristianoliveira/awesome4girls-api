@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: users
@@ -10,6 +11,11 @@
 #  updated_at :datetime         not null
 #
 
+# Represent an user inside system.
+#
+# There are 3 kinds of user ADMIN, USER, GUEST
+# the default is GUEST
+#
 class User < ActiveRecord::Base
   before_save :encrypt_password!
 
@@ -26,8 +32,9 @@ class User < ActiveRecord::Base
   end
 
   private
+
   def encrypt_password!
-    self.password = encrypted(self.password)
+    self.password = encrypted(password)
   end
 
   def encrypted(password)

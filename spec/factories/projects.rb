@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 # == Schema Information
 #
 # Table name: projects
@@ -14,8 +16,8 @@
 
 FactoryGirl.define do
   factory :project, class: Project do
-    title "some title"
-    description "some awesome description"
+    title 'some title'
+    description 'some awesome description'
 
     subsection
   end

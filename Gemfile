@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 # A sample Gemfile
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 gem 'sinatra'
 
@@ -8,12 +9,12 @@ gem 'activerecord'
 
 gem 'sinatra-activerecord'
 gem 'sinatra-contrib'
-gem "sinatra-param"
+gem 'sinatra-param'
 
 group :development, :test do
-  gem "rspec"
-  gem "pry"
-  gem "sqlite3"
+  gem 'rspec'
+  gem 'pry'
+  gem 'sqlite3'
   gem 'annotate'
 
   gem 'rack-test'
@@ -23,4 +24,6 @@ group :development, :test do
   gem 'faker'
   gem 'database_cleaner'
 
+  # code style
+  gem 'rubocop'
 end

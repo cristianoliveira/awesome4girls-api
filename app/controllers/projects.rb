@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Responsible expose projects endpoints
+#
 class ProjectsController < Sinatra::Base
   register Sinatra::BasicAuth
   register Sinatra::ErrorsHandler
@@ -12,12 +14,12 @@ class ProjectsController < Sinatra::Base
   # GET /projects/1
   get '/:id' do
     project = Project.find(params[:id])
-    json({ type: :project, data: project })
+    json(type: :project, data: project)
   end
 
   # GET projects
   get '/' do
-    json Project.all()
+    json Project.all
   end
 
   # POST /projects?title=meetup&description=somedescription&lang=pt
@@ -34,9 +36,9 @@ class ProjectsController < Sinatra::Base
                                       author_id: @user.id)
 
     if project.save
-      json({ message: "project created."})
+      json(message: 'project created.')
     else
-      halt 400, json({ errors: project.errors.full_messages })
+      halt 400, json(errors: project.errors.full_messages)
     end
   end
 
@@ -46,18 +48,19 @@ class ProjectsController < Sinatra::Base
     project = Project.find(params[:id])
 
     if project.destroy_by(@user)
-      json({ message: "project deleted."})
+      json(message: 'project deleted.')
     else
       status = project.errors.include?(:not_allowed) ? 405 : 400
-      halt status, json({ errors: project.errors.full_messages })
+      halt status, json(errors: project.errors.full_messages)
     end
   end
 
   private
+
   def restricted_to_users!
-    authorize!("users") { |name, pass|
+    authorize!('users') do |name, pass|
       @user = User.find_by_name(name)
-      @user and @user.auth?(pass) and @user.is_a?(User::ROLE_USER)
-    }
+      @user && @user.auth?(pass) && @user.is_a?(User::ROLE_USER)
+    end
   end
 end
