@@ -13,7 +13,6 @@ require "json"
 
 FactoryGirl.definition_file_paths = [ File.join(File.dirname(__FILE__), 'factories') ]
 DatabaseCleaner.strategy = :truncation
-DatabaseCleaner.clean
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -26,13 +25,15 @@ RSpec.configure do |config|
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
-  config.include FactoryGirl::Syntax::Methods
-  config.before(:suite) { FactoryGirl.find_definitions }
-  config.before(:each) { DatabaseCleaner.clean }
-
-
   config.include Rack::Test::Methods
 
+  config.include FactoryGirl::Syntax::Methods
+
+  config.before(:suite) do
+    FactoryGirl.find_definitions
+    DatabaseCleaner.clean
+  end
+  config.before(:each) { DatabaseCleaner.clean }
 end
 
 # Application
