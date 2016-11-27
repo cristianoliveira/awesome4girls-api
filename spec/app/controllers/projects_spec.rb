@@ -95,7 +95,7 @@ describe 'ProjectsController', type: :controller do
 
   describe 'adding projects' do
     before do
-      create(:admin, name: 'jonh', password: '123')
+      @user = create(:admin, name: 'jonh', password: '123')
       basic_authorize 'jonh', '123'
       @subsection = create(:subsection)
     end
@@ -117,6 +117,11 @@ describe 'ProjectsController', type: :controller do
       it 'contains project created' do
         get '/projects'
         expect(last_response.body).to include('fooproject')
+      end
+
+      it 'uses the current user as author' do
+        get '/projects'
+        expect(data.first['author_id']).to eq(@user.id)
       end
     end
 
@@ -149,10 +154,10 @@ describe 'ProjectsController', type: :controller do
 
   describe 'deleting projects' do
     before do
-      create(:admin, name: 'jonh', password: '123')
+      @jonh = create(:admin, name: 'jonh', password: '123')
       basic_authorize 'jonh', '123'
       create(:project, title: 'bazproject')
-      project = create(:project, title: 'fooproject')
+      project = create(:project, title: 'fooproject', author_id: @jonh.id)
       delete "/projects/#{project.id}"
     end
 
@@ -166,6 +171,28 @@ describe 'ProjectsController', type: :controller do
       get '/projects'
       expect(last_response.body).to include('bazproject')
       expect(last_response.body).to_not include('fooproject')
+    end
+
+    it 'validates the author when common user' do
+      bob = create(:user, name: 'bob', password: '123')
+      basic_authorize 'bob', '123'
+      jonh_project = create(:project, author_id: @jonh.id)
+      delete "/projects/#{jonh_project.id}"
+
+      expect(last_response.content_type).to eq 'application/json'
+      expect(last_response.status).to be(405)
+      expect(data).to include('errors')
+    end
+
+    it 'accepts deletion of others when admin' do
+      bob = create(:admin, name: 'bob', password: '123')
+      basic_authorize 'bob', '123'
+      jonh_project = create(:project, author_id: @jonh.id)
+      delete "/projects/#{jonh_project.id}"
+
+      expect(last_response.content_type).to eq 'application/json'
+      expect(last_response.status).to be(200)
+      expect(data).to_not include('errors')
     end
   end
 end

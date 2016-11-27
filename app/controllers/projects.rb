@@ -29,8 +29,9 @@ class ProjectsController < Sinatra::Base
 
     subsection = Subsection.find(params[:subsection])
     project = subsection.projects.new(title: params[:title],
-                          description: params[:description],
-                          subsection: subsection)
+                                      description: params[:description],
+                                      subsection: subsection,
+                                      author_id: @user.id)
 
     if project.save
       json({ message: "project created."})
@@ -44,18 +45,19 @@ class ProjectsController < Sinatra::Base
     restricted_to_users!
     project = Project.find(params[:id])
 
-    if project.destroy
+    if project.destroy_by(@user)
       json({ message: "project deleted."})
     else
-      halt 400, json({ errors: project.errors.full_messages })
+      status = project.errors.include?(:not_allowed) ? 405 : 400
+      halt status, json({ errors: project.errors.full_messages })
     end
   end
 
   private
   def restricted_to_users!
     authorize!("users") { |name, pass|
-      user = User.find_by_name(name)
-      user and user.auth?(pass) and user.is_a?(User::ROLE_USER)
+      @user = User.find_by_name(name)
+      @user and @user.auth?(pass) and @user.is_a?(User::ROLE_USER)
     }
   end
 end
