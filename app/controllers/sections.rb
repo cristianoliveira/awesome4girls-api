@@ -24,7 +24,7 @@ class SectionsController < Sinatra::Base
 
   # POST /sections?title=meetup&description=somedescription
   post '/' do
-    restricted_to_users!
+    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
     param :title, String, required: true
     param :description, String
 
@@ -39,22 +39,13 @@ class SectionsController < Sinatra::Base
 
   # DELETE /sections/1
   delete '/:id' do
-    restricted_to_users!
+    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
     section = Section.find(params[:id])
 
     if section.destroy
       json(message: 'section deleted.')
     else
       halt 400, json(errors: section.errors.full_messages)
-    end
-  end
-
-  private
-
-  def restricted_to_users!
-    authorize!('users') do |name, pass|
-      user = User.find_by_name(name)
-      user && user.auth?(pass) && user.is_a?(User::ROLE_USER)
     end
   end
 end

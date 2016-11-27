@@ -9,10 +9,7 @@ class UsersController < Sinatra::Base
 
   before do
     content_type :json
-    authorize!('admin') do |name, pass|
-      user = User.find_by_name(name)
-      user && user.auth?(pass) && user.is_a?(User::ROLE_ADMIN)
-    end
+    restricted_to!(User::ROLE_ADMIN) { |name| User.find_by_name(name) }
   end
 
   # GET /users/1

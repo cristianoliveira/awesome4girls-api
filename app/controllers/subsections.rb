@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Responsible for implementing subsection endpoints
+# Responsible expose subsection endpoints
 #
 class SubsectionsController < Sinatra::Base
   register Sinatra::BasicAuth
@@ -25,7 +25,7 @@ class SubsectionsController < Sinatra::Base
 
   # POST /section/1/subsections?title=meetup&description=somedescription
   post '/:sectionid/subsections' do
-    restricted_to_users!
+    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
 
     param :title, String, required: true
     param :description, String
@@ -43,7 +43,7 @@ class SubsectionsController < Sinatra::Base
 
   # DELETE /section/1/subsections/1
   delete '/:sectionid/subsections/:id' do
-    restricted_to_users!
+    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
 
     section = Section.find(params[:sectionid])
     subsection = section.subsections.find(params[:id])
@@ -52,15 +52,6 @@ class SubsectionsController < Sinatra::Base
       json(message: 'Subsection deleted.')
     else
       halt 400, json(error: section.errors.full_messages)
-    end
-  end
-
-  private
-
-  def restricted_to_users!
-    authorize!('users') do |name, pass|
-      user = User.find_by_name(name)
-      user && user.auth?(pass) && user.is_a?(User::ROLE_USER)
     end
   end
 end

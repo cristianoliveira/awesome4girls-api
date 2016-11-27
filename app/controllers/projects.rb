@@ -24,7 +24,8 @@ class ProjectsController < Sinatra::Base
 
   # POST /projects?title=meetup&description=somedescription&lang=pt
   post '/' do
-    restricted_to_users!
+    restricted_to!(User::ROLE_USER) { |name| @user = User.find_by_name(name) }
+
     param :title, String, required: true
     param :description, String, required: true
     param :subsection, Integer, required: true
@@ -44,7 +45,7 @@ class ProjectsController < Sinatra::Base
 
   # DELETE /projects/1
   delete '/:id' do
-    restricted_to_users!
+    restricted_to!(User::ROLE_USER) { |name| @user = User.find_by_name(name) }
     project = Project.find(params[:id])
 
     if project.destroy_by(@user)
@@ -52,15 +53,6 @@ class ProjectsController < Sinatra::Base
     else
       status = project.errors.include?(:not_allowed) ? 405 : 400
       halt status, json(errors: project.errors.full_messages)
-    end
-  end
-
-  private
-
-  def restricted_to_users!
-    authorize!('users') do |name, pass|
-      @user = User.find_by_name(name)
-      @user && @user.auth?(pass) && @user.is_a?(User::ROLE_USER)
     end
   end
 end

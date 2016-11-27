@@ -14,18 +14,24 @@ module Sinatra
     # Injects authentication helpers methods.
     #
     module Helpers
-      def authorize!(realm)
-        headers 'WWW-Authenticate' => %(Basic realm="#{realm}")
-        auth =  Rack::Auth::Basic::Request.new(request.env)
+      def restricted_to!(role)
+        headers 'WWW-Authenticate' => 'Basic realm=member'
+
+        name, pass = credentials(request)
+        user = yield(name)
+        authorized = user && user.auth?(pass) && user.is_a?(role)
+
+        raise AuthenticationError, 'User not authorized.' unless authorized
+      end
+
+      def credentials(request)
+        auth = Rack::Auth::Basic::Request.new(request.env)
 
         unless auth.provided? && auth.basic? && auth.credentials
           raise AuthenticationError, 'Basic Authentication not provided.'
         end
 
-        name, password = auth.credentials
-
-        authorized = yield(name, password)
-        raise AuthenticationError, 'User not authorized.' unless authorized
+        auth.credentials
       end
     end
 
