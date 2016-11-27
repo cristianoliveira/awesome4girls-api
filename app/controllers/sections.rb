@@ -31,7 +31,7 @@ class SectionsController < Sinatra::Base
     if section.save
       json({ message: "section created."})
     else
-      halt 400, json({ error: section.errors.full_messages })
+      halt 400, json({ errors: section.errors.full_messages })
     end
   end
 
@@ -43,7 +43,7 @@ class SectionsController < Sinatra::Base
     if section.destroy
       json({ message: "section deleted."})
     else
-      halt 400, json({ error: section.errors.full_messages })
+      halt 400, json({ errors: section.errors.full_messages })
     end
   end
 
