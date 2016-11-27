@@ -8,6 +8,11 @@ setup:
 run:
 	@bundle exec rackup -p 3000
 
+testall: test style
+
 test:
 	bundle exec rake db:test:prepare
 	bundle exec rspec
+
+style:
+	bundle exec rubocop --force-exclusion
