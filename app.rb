@@ -11,11 +11,10 @@ require_relative 'app/models/init'
 require_relative 'app/controllers/init'
 
 class App
-  # Define Routes
   def self.routes
     {
       '/users' => UsersController,
+      '/sections' => SectionsController,
     }
   end
-
 end

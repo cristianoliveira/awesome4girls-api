@@ -22,3 +22,9 @@ json
 
  - Authentication
  It uses the Basic Authentication scheme specified in https://tools.ietf.org/html/rfc2617
+
+- Deploy
+ I would like to provide some kind of easy way either to deploy or setup development env.
+ I think the better way to do this is through Doker. I am developing it in a OSX
+ my experience with osx + docker was not that good but I know they had inprooved so
+ I going to try.
