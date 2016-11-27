@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id            :integer          not null, primary key
+#  title         :string
+#  description   :string
+#  language      :string
+#  subsection_id :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
+FactoryGirl.define do
+  factory :project, class: Project do
+    title "some title"
+    description "some awesome description"
+
+    subsection
+  end
+end
