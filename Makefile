@@ -9,4 +9,5 @@ run:
 	@bundle exec rackup -p 3000
 
 test:
+	bundle exec rake db:test:prepare
 	bundle exec rspec
