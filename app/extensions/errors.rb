@@ -8,13 +8,13 @@ module Sinatra
       # Handling resource not found
       app.error ActiveRecord::RecordNotFound do
         exception = env['sinatra.error']
-        halt 404, json({ error: exception.message })
+        halt 404, json({ errors: exception.message })
       end
 
       # Handling authentications
       app.error Sinatra::BasicAuth::AuthenticationError do
         exception = env['sinatra.error']
-        halt 401, json({ error: exception.message })
+        halt 401, json({ errors: exception.message })
       end
     end
   end

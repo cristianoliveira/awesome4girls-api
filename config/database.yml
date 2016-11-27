@@ -1,7 +1,15 @@
+test:
+  adapter: sqlite3
+  encoding: unicode
+  database: afgtest
+  pool: 2
+  username: test
+  password: test
+
 development:
   adapter: sqlite3
   encoding: unicode
-  database: afg
+  database: afgdev
   pool: 2
   username: dev
   password: dev

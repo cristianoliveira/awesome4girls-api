@@ -7,7 +7,7 @@ class UsersController < Sinatra::Base
 
   before do
     content_type :json
-    authorize!("admin") { |name, pass|
+    authorize!('admin') { |name, pass|
       user = User.find_by_name(name)
       user and user.auth?(pass) and user.is_a?(User::ROLE_ADMIN)
     }
@@ -33,9 +33,9 @@ class UsersController < Sinatra::Base
     user = User.new(params)
 
     if user.save
-      json({ message: "User created."})
+      json({ message: 'User created.'})
     else
-      halt 400, json({ error: user.errors.full_messages })
+      halt 400, json({ errors: user.errors.full_messages })
     end
   end
 
@@ -44,9 +44,9 @@ class UsersController < Sinatra::Base
     user = User.find(params[:id])
 
     if user.destroy
-      json({ message: "User deleted."})
+      json({ message: 'User deleted.'})
     else
-      halt 400, json({ error: user.errors.full_messages })
+      halt 400, json({ errors: user.errors.full_messages })
     end
   end
 end
