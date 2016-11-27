@@ -1,14 +1,15 @@
 # == Schema Information
 #
-# Table name: sections
+# Table name: subsections
 #
 #  id          :integer          not null, primary key
 #  title       :string
 #  description :string
+#  section_id  :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
 
-class Section < ActiveRecord::Base
-  has_many :subsections
+class Subsection < ActiveRecord::Base
+  belongs_to :section
 end

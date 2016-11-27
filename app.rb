@@ -15,6 +15,7 @@ class App
     {
       '/users' => UsersController,
       '/sections' => SectionsController,
+      '/section'=> SubsectionsController,
     }
   end
 end

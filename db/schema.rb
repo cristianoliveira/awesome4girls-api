@@ -28,6 +28,15 @@ ActiveRecord::Schema.define(version: 20161127123910) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "subsections", force: :cascade do |t|
+    t.string   "title"
+    t.string   "description"
+    t.integer  "section_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["section_id"], name: "index_subsections_on_section_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "name"
     t.string   "password"
