@@ -19,4 +19,6 @@
 #
 class Section < ActiveRecord::Base
   has_many :subsections
+
+  validates :title, presence: true
 end
