@@ -17,9 +17,15 @@ class ProjectsController < Sinatra::Base
     json(type: :project, data: project)
   end
 
-  # GET projects
+  # GET projects?subsection=1
   get '/' do
-    json Project.all
+    if params[:subsection]
+      projects = Project.where(subsection_id: params[:subsection])
+    else
+      projects = Project.all
+    end
+
+    json projects
   end
 
   # POST /projects?title=meetup&description=somedescription&lang=pt

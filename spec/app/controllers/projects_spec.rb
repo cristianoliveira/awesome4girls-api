@@ -92,6 +92,16 @@ describe 'ProjectsController', type: :controller do
     it { expect(last_response.content_type).to eq 'application/json' }
     it { expect(last_response.status).to be(200) }
     it { expect(data.size).to eq(1) }
+    it 'accepts optional params' do
+      subsection = create(:subsection)
+      create(:project, subsection: subsection)
+      create(:project, subsection: subsection)
+      create(:project)
+
+      get '/projects', subsection: subsection.id
+
+      expect(data.size).to eq(2)
+    end
   end
 
   describe 'adding projects' do

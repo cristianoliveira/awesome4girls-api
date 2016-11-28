@@ -1,5 +1,5 @@
 # awesome4girls-api
-The api for the https://github.com/cristianoliveira/awesome4girls project.
+The [api](https://awesome4girl-api.herokuapp.com/) for the [awesome4girls](https://github.com/cristianoliveira/awesome4girls) project.
 
 ## Motivation
 Since the beginning of the awesome4girls project I wondered that it will become
@@ -14,7 +14,7 @@ This api is the first step to construct the site.
 |users      | `/users`                             | GET/POST/DELETE     | Only admin                   |
 |sections   | `/sections`                          | GET/POST/DELETE     | admin/user: POST/DELETE      |
 |subsections| `/section/:sectionid/subsections`    | GET/POST/DELETE     | admin/user: POST/DELETE      |
-|projects   | `/projects?section=id&subsection=id` | GET/POST/PUT/DELETE | admin/user: POST/PUT/ DELETE |
+|projects   | `/projects`                          | GET/POST/PUT/DELETE | admin/user: POST/PUT/ DELETE |
 
 ## Endpoints examples
 It uses Basic Authentication so in order to manipulate some data you need
@@ -99,6 +99,10 @@ Projects are the main data. It is under Section>Subsection>Projects.
 Listing is open and is not required an user
 ```bash
 curl https://awesome4girl-api.herokuapp.com/projects
+```
+Filtered by subsection:
+```bash
+curl https://awesome4girl-api.herokuapp.com/projects?subsection=1
 ```
 
 Get one:

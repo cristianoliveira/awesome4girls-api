@@ -7,6 +7,7 @@ json
 
 ## Architecture
  - Framework
+
  As it is a simple json api and I think it will not grow up to much
  I picked Sinatra because it is simple and robust framework. Also it
  has a good support for extensions.
@@ -20,7 +21,7 @@ json
  - App Structure
 
  I did it as a MVC Architecture cause it is simple to understand and is good
- for mantaining
+ for mantaining.
 
  - Authentication
 
@@ -34,3 +35,14 @@ json
  I going to try.
 
  I also deployed on Heroku https://awesome4girl-api.herokuapp.com/
+
+## Conclusion
+
+I took me 2 days to create this API. I know it can be improved with better features
+and a better authentication process. It has tests so to improve from here
+is easier. Since it is a new api there is no problem in changing its interface
+but we can implement a versioned Api.
+
+If I had more time I would implement and job that will insert data periodically or
+even better integrate with github to execute the job evey time the repository https://github.com/cristianoliveira/awesome4girls that 
+is where the data come from.
