@@ -134,14 +134,30 @@ curl -XDELETE https://awesome4girl-api.herokuapp.com/projects/1 -u user:user
 You can contribute following this simple steps:
    - Fork it!
    - Create your feature branch: `git checkout -b my-new-feature`
-   - Commit your changes: `git commit -am 'Add some feature'`
+   - Commit your changes: `git commit -am 'feature: some feature'`
    - Push to the branch: `git push origin my-new-feature`
    - Make sure the tests are passing. `make test`
    - Submit a pull request
 
 Pull Requests are really welcome! Others support also.
 
-** Pull Request should have unit tests **
+**Pull Request should have unit tests**
+
+We use [semantic commits](https://seesparkbox.com/foundry/semantic_commit_messages)
+make sure the commits follow that standard:
+```
+feat: add hat wobble
+^--^  ^------------^
+|     |
+|     +-> Summary in present tense.
+|
++-------> Type: chore, docs, feat, fix, refactor, style, or test.
+```
+
+## Code Style
+
+This project uses [Rubocop](https://github.com/bbatsov/rubocop) as a code linter
+when contributing make sure you've executed it: `make style`
 
 ## License
 
