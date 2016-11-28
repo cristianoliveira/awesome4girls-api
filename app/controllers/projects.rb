@@ -20,13 +20,7 @@ class ProjectsController < Sinatra::Base
 
   # GET projects?subsection=1
   get '/' do
-    projects = if params[:subsection]
-                 Project.where(subsection_id: params[:subsection])
-               else
-                 Project.all
-               end
-
-    jsonapi(projects, is_collection: true)
+    jsonapi(Project.all, is_collection: true)
   end
 
   # POST /projects?title=meetup&description=somedescription&lang=pt

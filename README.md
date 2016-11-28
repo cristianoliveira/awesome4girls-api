@@ -13,7 +13,9 @@ This api is the first step to construct the site.
 |version    | `/version`                           | GET                 | No                           |
 |users      | `/users`                             | GET/POST/DELETE     | Only admin                   |
 |sections   | `/sections`                          | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
-|subsections| `/section/:sectionid/subsections`    | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
+|subsections| `/sections/1/subsections`            | GET                 | No                           |
+|subsections| `/subsections`                       | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
+|subsections| `/subsections/1/projects`            | GET                 | No                           |
 |projects   | `/projects`                          | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
 
 ## Endpoints examples
@@ -90,17 +92,17 @@ curl https://awesome4girl-api.herokuapp.com/section/1/subsections/1
 
 Creating:
 ```bash
-curl -XPOST https://awesome4girl-api.herokuapp.com/section/1/subsections -u user:user -d'title=john&description=foo'
+curl -XPOST https://awesome4girl-api.herokuapp.com/subsections -u user:user -d'title=john&description=foo'
 ```
 
 Creating:
 ```bash
-curl -XPUT https://awesome4girl-api.herokuapp.com/section/1/subsections/:id -u user:user -d'title=john&description=foo'
+curl -XPUT https://awesome4girl-api.herokuapp.com/subsections/:id -u user:user -d'title=john&description=foo'
 ```
 
 Deleting:
 ```bash
-curl -XDELETE https://awesome4girl-api.herokuapp.com/section/1/subsections/1 -u user:user
+curl -XDELETE https://awesome4girl-api.herokuapp.com/subsections/1 -u user:user
 ```
 
 ### Projects
@@ -110,9 +112,10 @@ Listing is open and is not required an user
 ```bash
 curl https://awesome4girl-api.herokuapp.com/projects
 ```
+
 Filtered by subsection:
 ```bash
-curl https://awesome4girl-api.herokuapp.com/projects?subsection=1
+curl https://awesome4girl-api.herokuapp.com/subsection/1/projects
 ```
 
 Get one:
