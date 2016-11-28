@@ -13,18 +13,24 @@ json
  Rails is great but I think it is too much for this soluction.
 
  - Database
+
  I picked postgress sql cause it is a great opens source SQL database and it
  has a well known integration with ActiveRecord
 
  - App Structure
+
  I did it as a MVC Architecture cause it is simple to understand and is good
  for mantaining
 
  - Authentication
+
  It uses the Basic Authentication scheme specified in https://tools.ietf.org/html/rfc2617
 
 - Deploy
+
  I would like to provide some kind of easy way either to deploy or setup development env.
  I think the better way to do this is through Doker. I am developing it in a OSX
  my experience with osx + docker was not that good but I know they had inprooved so
  I going to try.
+
+ I also deployed on Heroku https://awesome4girl-api.herokuapp.com/
