@@ -31,6 +31,10 @@ class User < ActiveRecord::Base
     self.role <= role
   end
 
+  def as_json(options = {})
+    super(options.merge({ except: [:password] }))
+  end
+
   private
 
   def encrypt_password!
