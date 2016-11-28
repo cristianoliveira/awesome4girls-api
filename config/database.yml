@@ -7,17 +7,18 @@ test:
   password: test
 
 development:
-  adapter: sqlite3
+  adapter: postgresql
   encoding: unicode
   database: afgdev
   pool: 2
-  username: dev
-  password: dev
+  username: <%= ENV['PG_USER'] %>
+  password: <%= ENV['PG_PASS'] %>
 
 production:
   adapter: postgresql
   encoding: unicode
   database: afg
   pool: 2
-  username: prod
-  password: prod
+  username: <%= ENV['PG_USER'] %>
+  password: <%= ENV['PG_PASS'] %>
+  host: localhost

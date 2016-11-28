@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20161127194353) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "projects", force: :cascade do |t|
     t.string   "title"
     t.string   "description"
@@ -20,8 +23,8 @@ ActiveRecord::Schema.define(version: 20161127194353) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "author_id"
-    t.index ["author_id"], name: "index_projects_on_author_id"
-    t.index ["subsection_id"], name: "index_projects_on_subsection_id"
+    t.index ["author_id"], name: "index_projects_on_author_id", using: :btree
+    t.index ["subsection_id"], name: "index_projects_on_subsection_id", using: :btree
   end
 
   create_table "sections", force: :cascade do |t|
@@ -37,7 +40,7 @@ ActiveRecord::Schema.define(version: 20161127194353) do
     t.integer  "section_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["section_id"], name: "index_subsections_on_section_id"
+    t.index ["section_id"], name: "index_subsections_on_section_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -48,4 +51,6 @@ ActiveRecord::Schema.define(version: 20161127194353) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "projects", "subsections"
+  add_foreign_key "subsections", "sections"
 end
