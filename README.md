@@ -1,4 +1,4 @@
-# awesome4girls-api
+# awesome4girls-api [![Build Status](https://travis-ci.org/cristianoliveira/awesome4girls-api.svg?branch=master)](https://travis-ci.org/cristianoliveira/awesome4girls-api)
 The [api](https://awesome4girl-api.herokuapp.com/) for the [awesome4girls](https://github.com/cristianoliveira/awesome4girls) project.
 
 ## Motivation
