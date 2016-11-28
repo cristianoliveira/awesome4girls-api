@@ -18,6 +18,7 @@ GEM
     arel (7.1.4)
     ast (2.3.0)
     backports (3.6.8)
+    byebug (9.0.6)
     coderay (1.1.1)
     concurrent-ruby (1.0.2)
     database_cleaner (1.5.3)
@@ -40,6 +41,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.1)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     puma (3.6.2)
     rack (1.6.5)
     rack-protection (1.5.3)
@@ -103,7 +107,7 @@ DEPENDENCIES
   faker
   jsonapi-serializers
   pg
-  pry
+  pry-byebug
   puma
   rack-test
   rake
