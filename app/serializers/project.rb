@@ -5,4 +5,3 @@
 class ProjectSerializer < BaseSerializer
   attributes :title, :description, :language, :author
 end
-

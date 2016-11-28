@@ -135,7 +135,7 @@ describe 'SubsectionsController', type: :controller do
       before do
         section = create(:section)
         post('/subsections',
-            {title: 'foosection', description: 'some foo', section: section.id})
+             title: 'foosection', description: 'some foo', section: section.id)
       end
 
       let(:data) { JSON.parse(last_response.body) }
@@ -213,7 +213,7 @@ describe 'SubsectionsController', type: :controller do
     it { expect(data).to_not include('errors') }
 
     it 'not contains section deleted' do
-      get "/subsections"
+      get '/subsections'
       expect(last_response.body).to include('baz')
       expect(last_response.body).to_not include('foo')
     end

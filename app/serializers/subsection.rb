@@ -8,7 +8,6 @@ class SubsectionSerializer < BaseSerializer
   has_many :projects
 
   def self_link
-    "#{super}"
+    super.to_s
   end
 end
-

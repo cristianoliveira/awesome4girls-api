@@ -15,7 +15,7 @@ module Sinatra
       # options::
       #   Optional params for serializing
       #
-      def jsonapi(data, options={})
+      def jsonapi(data, options = {})
         json JSONAPI::Serializer.serialize(data, options)
       end
 
