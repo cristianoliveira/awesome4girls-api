@@ -98,7 +98,7 @@ describe 'ProjectsController', type: :controller do
       create(:project, subsection: subsection)
       create(:project)
 
-      get '/projects', subsection: subsection.id
+      get "subsections/#{subsection.id}/projects"
 
       expect(data['data'].size).to eq(2)
     end
