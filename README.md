@@ -9,6 +9,8 @@ This api is the first step to construct the site.
 ## Main Routes
 | Data      | Route                                | Methods             | Restricted                   |
 |-----------|--------------------------------------|---------------------|------------------------------|
+|home       | `/`                                  | GET                 | No                           |
+|version    | `/version`                           | GET                 | No                           |
 |users      | `/users`                             | GET/POST/DELETE     | Only admin                   |
 |sections   | `/sections`                          | GET/POST/DELETE     | admin/user: POST/DELETE      |
 |subsections| `/section/:sectionid/subsections`    | GET/POST/DELETE     | admin/user: POST/DELETE      |
