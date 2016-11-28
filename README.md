@@ -120,6 +120,17 @@ Deleting:
 curl -XDELETE https://awesome4girl-api.herokuapp.com/projects/1 -u user:user
 ```
 
+## Setup and Running
+It uses Postgres as the main database make sure it has installed.
+```bash
+make setup
+```
+
+The application runs in port 3000 by default.
+```bash
+make run
+```
+
 ## Working in progress
   - [x] Docker
   - [x] Api documentation
