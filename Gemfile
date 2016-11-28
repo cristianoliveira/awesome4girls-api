@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # A sample Gemfile
 source 'https://rubygems.org'
+ruby '2.3.0'
 
 gem 'sinatra'
 
@@ -10,6 +11,8 @@ gem 'activerecord'
 gem 'sinatra-activerecord'
 gem 'sinatra-contrib'
 gem 'sinatra-param'
+
+gem 'puma'
 
 group :development, :test do
   gem 'rspec'
