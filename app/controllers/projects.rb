@@ -19,11 +19,11 @@ class ProjectsController < Sinatra::Base
 
   # GET projects?subsection=1
   get '/' do
-    if params[:subsection]
-      projects = Project.where(subsection_id: params[:subsection])
-    else
-      projects = Project.all
-    end
+    projects = if params[:subsection]
+                 Project.where(subsection_id: params[:subsection])
+               else
+                 Project.all
+               end
 
     json projects
   end
