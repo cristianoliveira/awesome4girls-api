@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super(options.merge({ except: [:password] }))
+    super(options.merge(except: [:password]))
   end
 
   private

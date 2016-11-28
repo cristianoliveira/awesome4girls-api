@@ -14,6 +14,8 @@ gem 'sinatra-param'
 
 gem 'puma'
 
+gem 'pg'
+
 group :development, :test do
   gem 'rspec'
   gem 'pry'
