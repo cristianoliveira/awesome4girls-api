@@ -7,7 +7,7 @@ describe 'SubsectionsController', type: :controller do
   describe 'authentication' do
     context 'without basic authentication' do
       describe 'get subsections' do
-        before { get '/section/1/subsections' }
+        before { get '/subsections' }
         let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
@@ -17,7 +17,7 @@ describe 'SubsectionsController', type: :controller do
 
       describe 'create subsections' do
         before do
-          post '/section/1/subsections', title: 'baz', description: 'foo'
+          post '/subsections', title: 'baz', description: 'foo'
         end
 
         let(:data) { JSON.parse(last_response.body) }
@@ -30,7 +30,7 @@ describe 'SubsectionsController', type: :controller do
       describe 'update subsections' do
         before do
           subsection = create(:subsection)
-          put "/section/1/subsections/#{subsection.id}", title: 'baz', description: 'foo'
+          put "/subsections/#{subsection.id}", title: 'baz', description: 'foo'
         end
 
         let(:data) { JSON.parse(last_response.body) }
@@ -43,7 +43,7 @@ describe 'SubsectionsController', type: :controller do
       describe 'delete subsections' do
         before do
           create(:subsection)
-          delete '/section/1/subsections/1'
+          delete '/subsections/1'
         end
 
         let(:data) { JSON.parse(last_response.body) }
@@ -60,7 +60,7 @@ describe 'SubsectionsController', type: :controller do
         end
 
         describe 'get subsections' do
-          before { get '/section/1/subsections' }
+          before { get '/subsections' }
           let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
@@ -80,7 +80,7 @@ describe 'SubsectionsController', type: :controller do
         describe 'update sections' do
           before do
             subsection = create(:subsection)
-            put "/section/1/subsections/#{subsection.id}", title: 'baz', description: 'foo'
+            put "/subsections/#{subsection.id}", title: 'baz', description: 'foo'
           end
           let(:data) { JSON.parse(last_response.body) }
 
@@ -114,14 +114,15 @@ describe 'SubsectionsController', type: :controller do
       create(:admin, name: 'jonh', password: '123')
       basic_authorize 'jonh', '123'
       create(:subsection)
-      get '/section/1/subsections'
+      get '/subsections'
     end
 
     let(:data) { JSON.parse(last_response.body) }
 
     it { expect(last_response.content_type).to eq 'application/json' }
     it { expect(last_response.status).to be(200) }
-    it { expect(data.size).to eq(1) }
+    it { expect(last_response.body).to include('subsections') }
+    it { expect(data['data'].size).to eq(2) }
   end
 
   describe 'adding sections' do
@@ -132,7 +133,9 @@ describe 'SubsectionsController', type: :controller do
 
     context 'passing required params' do
       before do
-        post '/section/1/subsections', title: 'foosection', description: 'some foo'
+        section = create(:section)
+        post('/subsections',
+            {title: 'foosection', description: 'some foo', section: section.id})
       end
 
       let(:data) { JSON.parse(last_response.body) }
@@ -142,22 +145,23 @@ describe 'SubsectionsController', type: :controller do
       it { expect(data).to_not include('errors') }
 
       it 'contains section created' do
-        get '/section/1/subsections'
+        get '/subsections'
         expect(last_response.body).to include('foosection')
       end
     end
 
     context 'without required params' do
+      let(:section) { create(:section) }
       let(:data) { JSON.parse(last_response.body) }
 
       it 'validates title' do
-        post '/section/1/subsections', description: '123123'
+        post '/subsections', description: '123123', section: section.id
         expect(last_response.status).to eq 400
         expect(data).to include('errors')
       end
 
       it 'accepts empty description' do
-        post '/section/1/subsections', title: 'foo'
+        post '/subsections', title: 'foo', section: section.id
         expect(last_response.status).to eq 200
         expect(data).to_not include('errors')
       end
@@ -174,7 +178,8 @@ describe 'SubsectionsController', type: :controller do
       before do
         section = create(:section)
         subsection = create(:subsection, title: 'foosubsction', section: section)
-        put "/section/#{section.id}/subsections/#{subsection.id}", title: 'newsubsection', description: 'foo'
+        put("/subsections/#{subsection.id}",
+            title: 'newsubsection', description: 'foo', section: section.id)
       end
 
       let(:data) { JSON.parse(last_response.body) }
@@ -184,7 +189,7 @@ describe 'SubsectionsController', type: :controller do
       it { expect(data).to_not include('errors') }
 
       it 'contains section created' do
-        get '/section/1/subsections'
+        get '/subsections'
         expect(last_response.body).to_not include('foosubsction')
         expect(last_response.body).to_not include('newsubsction')
       end
@@ -196,10 +201,9 @@ describe 'SubsectionsController', type: :controller do
       create(:admin, name: 'jonh', password: '123')
       basic_authorize 'jonh', '123'
 
-      @section = create(:section)
-      create(:subsection, title: 'baz', section: @section)
-      subsection = create(:subsection, title: 'foo', section: @section)
-      delete "/section/#{@section.id}/subsections/#{subsection.id}"
+      create(:subsection, title: 'baz')
+      subsection = create(:subsection, title: 'foo')
+      delete "/subsections/#{subsection.id}"
     end
 
     let(:data) { JSON.parse(last_response.body) }
@@ -209,7 +213,7 @@ describe 'SubsectionsController', type: :controller do
     it { expect(data).to_not include('errors') }
 
     it 'not contains section deleted' do
-      get "/section/#{@section.id}/subsections"
+      get "/subsections"
       expect(last_response.body).to include('baz')
       expect(last_response.body).to_not include('foo')
     end

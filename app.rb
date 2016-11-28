@@ -7,7 +7,9 @@ require 'sinatra/param'
 
 require 'digest/md5'
 require 'json'
+require 'jsonapi-serializers'
 
+require_relative 'app/serializers/init'
 require_relative 'app/extensions/init'
 require_relative 'app/models/init'
 require_relative 'app/controllers/init'
@@ -16,12 +18,13 @@ require_relative 'app/controllers/init'
 #
 class App
   VERSION = '0.0.1'
+
   def self.routes
     {
       '/' => MainController,
       '/users' => UsersController,
       '/sections' => SectionsController,
-      '/section' => SubsectionsController,
+      '/subsections' => SubsectionsController,
       '/projects' => ProjectsController
     }
   end

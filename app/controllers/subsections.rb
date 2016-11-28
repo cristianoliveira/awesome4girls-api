@@ -5,71 +5,72 @@
 class SubsectionsController < Sinatra::Base
   register Sinatra::BasicAuth
   register Sinatra::ErrorsHandler
+  register Sinatra::JsonApi
   helpers Sinatra::Param
 
   before do
     content_type :json
   end
 
-  # GET /section/1/subsections/1
-  get '/:sectionid/subsections/:id' do
-    section = Section.find(params[:sectionid])
-    subsection = section.subsections.find(params[:id])
-    json(type: :subsection, data: subsection)
+  # GET /subsections/1
+  get '/:id' do
+    subsection = Subsection.find(params[:id])
+    jsonapi(subsection, is_collection: false)
   end
 
-  # GET /section/1/subsections
-  get '/:sectionid/subsections' do
-    json Section.find(params[:sectionid]).subsections
+  # GET /subsections
+  get '/' do
+    subsections = Subsection.all
+    jsonapi(subsections, is_collection: true)
   end
 
-  # POST /section/1/subsections?title=meetup&description=somedescription
-  post '/:sectionid/subsections' do
+  # POST /subsections?title=meetup&description=somedescription&section=1
+  post '/' do
     restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
 
+    param :section, Integer, required: true
     param :title, String, required: true
     param :description, String
 
-    section = Section.find(params[:sectionid])
-    subsection = section.subsections.new(title: params[:title],
-                                         description: params[:description])
+    subsection = Subsection.new(title: params[:title],
+                                description: params[:description],
+                                section_id: params[:section])
 
     if subsection.save
-      json(message: 'Subsection created.')
+      jsonapi(subsection, is_collection: false)
     else
-      halt 400, json(error: section.errors.full_messages)
+      halt 400, json_errors(subsection.errors)
     end
   end
 
-  # PuT /section/1/subsections?title=meetup&description=somedescription
-  put '/:sectionid/subsections/:id' do
+  # PUT /subsections/1?title=meetup&description=somedescription
+  put '/:id' do
     restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
 
     param :title, String, required: true
     param :description, String
 
-    section = Section.find(params[:sectionid])
-    subsection = section.subsections.find(params[:id])
+    subsection = Subsection.find(params[:id])
     subsection.update_attributes(title: params[:title],
                                  description: params[:description])
 
     if subsection.save
       json(message: 'Subsection updated.')
     else
-      halt 400, json(error: section.errors.full_messages)
+      halt 400, json_errors(subsection.errors)
     end
   end
-  # DELETE /section/1/subsections/1
-  delete '/:sectionid/subsections/:id' do
+
+  # DELETE /subsections/1
+  delete '/:id' do
     restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
 
-    section = Section.find(params[:sectionid])
-    subsection = section.subsections.find(params[:id])
+    subsection = Subsection.find(params[:id])
 
     if subsection.destroy
       json(message: 'Subsection deleted.')
     else
-      halt 400, json(error: section.errors.full_messages)
+      halt 400, json_errors(subsection.errors)
     end
   end
 end

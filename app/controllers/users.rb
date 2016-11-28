@@ -3,6 +3,7 @@
 # Responsible expose the user endpoints
 #
 class UsersController < Sinatra::Base
+  register Sinatra::JsonApi
   register Sinatra::BasicAuth
   register Sinatra::ErrorsHandler
   helpers Sinatra::Param
@@ -15,12 +16,13 @@ class UsersController < Sinatra::Base
   # GET /users/1
   get '/:id' do
     user = User.find(params[:id])
-    json(type: :user, data: user)
+    jsonapi(user, is_collection: false)
   end
 
   # GET /users
   get '/' do
-    json User.all
+    users = User.all
+    jsonapi(users, is_collection: true)
   end
 
   # POST /users?name=bob&password=123&role=1
@@ -34,7 +36,7 @@ class UsersController < Sinatra::Base
     if user.save
       json(message: 'User created.')
     else
-      halt 400, json(errors: user.errors.full_messages)
+      halt 400, jsonapi_errors(user.errors)
     end
   end
 
@@ -43,9 +45,9 @@ class UsersController < Sinatra::Base
     user = User.find(params[:id])
 
     if user.destroy
-      json(message: 'User deleted.')
+      jsonapi(user, is_collection: false)
     else
-      halt 400, json(errors: user.errors.full_messages)
+      halt 400, jsonapi_errors(user.errors)
     end
   end
 end

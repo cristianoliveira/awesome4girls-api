@@ -11,6 +11,7 @@ gem 'activerecord'
 gem 'sinatra-activerecord'
 gem 'sinatra-contrib'
 gem 'sinatra-param'
+gem 'jsonapi-serializers'
 
 gem 'puma'
 

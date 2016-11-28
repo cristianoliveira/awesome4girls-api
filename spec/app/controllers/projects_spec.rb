@@ -100,7 +100,7 @@ describe 'ProjectsController', type: :controller do
 
       get '/projects', subsection: subsection.id
 
-      expect(data.size).to eq(2)
+      expect(data['data'].size).to eq(2)
     end
   end
 
@@ -129,7 +129,7 @@ describe 'ProjectsController', type: :controller do
 
       it 'uses the current user as author' do
         get '/projects'
-        expect(data.first['author_id']).to eq(@user.id)
+        expect(data['data'].first['attributes']['author']['id']).to eq(@user.id)
       end
     end
 

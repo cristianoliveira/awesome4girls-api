@@ -3,6 +3,7 @@
 # Responsible expose subsection endpoints
 #
 class SectionsController < Sinatra::Base
+  register Sinatra::JsonApi
   register Sinatra::BasicAuth
   register Sinatra::ErrorsHandler
   helpers Sinatra::Param
@@ -14,12 +15,18 @@ class SectionsController < Sinatra::Base
   # GET /sections/1
   get '/:id' do
     section = Section.find(params[:id])
-    json(type: :section, data: section)
+    jsonapi(section, is_collection: false)
+  end
+
+  # GET /sections/1/subsections
+  get '/:id/subsections' do
+    section = Section.find(params[:id])
+    jsonapi(section.subsections, is_collection: true)
   end
 
   # GET /sections
   get '/' do
-    json Section.all
+    jsonapi(Section.all, is_collection: true)
   end
 
   # POST /sections?title=meetup&description=somedescription
@@ -31,9 +38,9 @@ class SectionsController < Sinatra::Base
     section = Section.new(params)
 
     if section.save
-      json(message: 'section created.')
+      jsonapi(section, is_collection: false)
     else
-      halt 400, json(errors: section.errors.full_messages)
+      halt 400, json_errors(section.errors)
     end
   end
 
@@ -48,9 +55,9 @@ class SectionsController < Sinatra::Base
                               description: params[:description])
 
     if section.save
-      json(message: 'section updated.')
+      jsonapi(section, is_collection: false)
     else
-      halt 400, json(errors: section.errors.full_messages)
+      halt 400, json_errors(section.errors)
     end
   end
 

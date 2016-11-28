@@ -5,6 +5,7 @@
 class ProjectsController < Sinatra::Base
   register Sinatra::BasicAuth
   register Sinatra::ErrorsHandler
+  register Sinatra::JsonApi
   helpers Sinatra::Param
 
   before do
@@ -14,7 +15,7 @@ class ProjectsController < Sinatra::Base
   # GET /projects/1
   get '/:id' do
     project = Project.find(params[:id])
-    json(type: :project, data: project)
+    jsonapi(project, is_collecion: false)
   end
 
   # GET projects?subsection=1
@@ -25,7 +26,7 @@ class ProjectsController < Sinatra::Base
                  Project.all
                end
 
-    json projects
+    jsonapi(projects, is_collection: true)
   end
 
   # POST /projects?title=meetup&description=somedescription&lang=pt
@@ -43,9 +44,9 @@ class ProjectsController < Sinatra::Base
                                       author_id: @user.id)
 
     if project.save
-      json(message: 'project created.')
+      jsonapi(project, is_collecion: false)
     else
-      halt 400, json(errors: project.errors.full_messages)
+      halt 400, jsonapi_errors(project.errors)
     end
   end
 
@@ -58,7 +59,7 @@ class ProjectsController < Sinatra::Base
       json(message: 'project deleted.')
     else
       status = project.errors.include?(:not_allowed) ? 405 : 400
-      halt status, json(errors: project.errors.full_messages)
+      halt status, jsonapi_errors(project.errors)
     end
   end
 end
