@@ -37,6 +37,23 @@ class SectionsController < Sinatra::Base
     end
   end
 
+  # PUT /sections/:id?title=meetup&description=somedescription
+  put '/:id' do
+    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
+    param :title, String, required: true
+    param :description, String
+
+    section = Section.find(params[:id])
+    section.update_attributes(title: params[:title],
+                              description: params[:description])
+
+    if section.save
+      json(message: 'section updated.')
+    else
+      halt 400, json(errors: section.errors.full_messages)
+    end
+  end
+
   # DELETE /sections/1
   delete '/:id' do
     restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
