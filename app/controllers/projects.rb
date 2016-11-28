@@ -2,16 +2,7 @@
 
 # Responsible expose projects endpoints
 #
-class ProjectsController < Sinatra::Base
-  register Sinatra::BasicAuth
-  register Sinatra::ErrorsHandler
-  register Sinatra::JsonApi
-  helpers Sinatra::Param
-
-  before do
-    content_type :json
-  end
-
+class ProjectsController < ApiController
   # GET /projects/1
   get '/:id' do
     project = Project.find(params[:id])

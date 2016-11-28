@@ -11,32 +11,24 @@ module Sinatra
     class AuthenticationError < RuntimeError
     end
 
-    # Injects authentication helpers methods.
-    #
-    module Helpers
-      def restricted_to!(role)
-        headers 'WWW-Authenticate' => 'Basic realm=member'
+    def restricted_to!(role)
+      headers 'WWW-Authenticate' => 'Basic realm=member'
 
-        name, pass = credentials(request)
-        user = yield(name)
-        authorized = user && user.auth?(pass) && user.is_a?(role)
+      name, pass = credentials(request)
+      user = yield(name)
+      authorized = user && user.auth?(pass) && user.is_a?(role)
 
-        raise AuthenticationError, 'User not authorized.' unless authorized
-      end
-
-      def credentials(request)
-        auth = Rack::Auth::Basic::Request.new(request.env)
-
-        unless auth.provided? && auth.basic? && auth.credentials
-          raise AuthenticationError, 'Basic Authentication not provided.'
-        end
-
-        auth.credentials
-      end
+      raise AuthenticationError, 'User not authorized.' unless authorized
     end
 
-    def self.registered(app)
-      app.helpers BasicAuth::Helpers
+    def credentials(request)
+      auth = Rack::Auth::Basic::Request.new(request.env)
+
+      unless auth.provided? && auth.basic? && auth.credentials
+        raise AuthenticationError, 'Basic Authentication not provided.'
+      end
+
+      auth.credentials
     end
   end
 end

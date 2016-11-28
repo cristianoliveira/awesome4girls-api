@@ -2,12 +2,7 @@
 
 # Responsible expose the user endpoints
 #
-class UsersController < Sinatra::Base
-  register Sinatra::JsonApi
-  register Sinatra::BasicAuth
-  register Sinatra::ErrorsHandler
-  helpers Sinatra::Param
-
+class UsersController < ApiController
   before do
     content_type :json
     restricted_to!(User::ROLE_ADMIN) { |name| User.find_by_name(name) }

@@ -2,16 +2,7 @@
 
 # Responsible expose subsection endpoints
 #
-class SectionsController < Sinatra::Base
-  register Sinatra::JsonApi
-  register Sinatra::BasicAuth
-  register Sinatra::ErrorsHandler
-  helpers Sinatra::Param
-
-  before do
-    content_type :json
-  end
-
+class SectionsController < ApiController
   # GET /sections/1
   get '/:id' do
     section = Section.find(params[:id])

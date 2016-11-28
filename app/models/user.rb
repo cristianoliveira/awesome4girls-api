@@ -19,6 +19,9 @@
 class User < ActiveRecord::Base
   before_save :encrypt_password!
 
+  validates :name, presence: true
+  validates :password, presence: true
+
   ROLE_ADMIN = 1
   ROLE_USER  = 2
   ROLE_GUEST = 3
