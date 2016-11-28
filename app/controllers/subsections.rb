@@ -41,6 +41,24 @@ class SubsectionsController < Sinatra::Base
     end
   end
 
+  # PuT /section/1/subsections?title=meetup&description=somedescription
+  put '/:sectionid/subsections/:id' do
+    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
+
+    param :title, String, required: true
+    param :description, String
+
+    section = Section.find(params[:sectionid])
+    subsection = section.subsections.find(params[:id])
+    subsection.update_attributes(title: params[:title],
+                                 description: params[:description])
+
+    if subsection.save
+      json(message: 'Subsection updated.')
+    else
+      halt 400, json(error: section.errors.full_messages)
+    end
+  end
   # DELETE /section/1/subsections/1
   delete '/:sectionid/subsections/:id' do
     restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }

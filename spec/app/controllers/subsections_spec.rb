@@ -27,6 +27,19 @@ describe 'SubsectionsController', type: :controller do
         it { expect(data).to eq('errors' => 'Basic Authentication not provided.') }
       end
 
+      describe 'update subsections' do
+        before do
+          subsection = create(:subsection)
+          put "/section/1/subsections/#{subsection.id}", title: 'baz', description: 'foo'
+        end
+
+        let(:data) { JSON.parse(last_response.body) }
+
+        it { expect(last_response.content_type).to eq 'application/json' }
+        it { expect(last_response.status).to be(401) }
+        it { expect(data).to eq('errors' => 'Basic Authentication not provided.') }
+      end
+
       describe 'delete subsections' do
         before do
           create(:subsection)
@@ -57,6 +70,18 @@ describe 'SubsectionsController', type: :controller do
 
         describe 'create sections' do
           before { post '/sections', title: 'roy', description: 'foo' }
+          let(:data) { JSON.parse(last_response.body) }
+
+          it { expect(last_response.content_type).to eq 'application/json' }
+          it { expect(last_response.status).to be(401) }
+          it { expect(data).to eq('errors' => 'User not authorized.') }
+        end
+
+        describe 'update sections' do
+          before do
+            subsection = create(:subsection)
+            put "/section/1/subsections/#{subsection.id}", title: 'baz', description: 'foo'
+          end
           let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
@@ -135,6 +160,33 @@ describe 'SubsectionsController', type: :controller do
         post '/section/1/subsections', title: 'foo'
         expect(last_response.status).to eq 200
         expect(data).to_not include('errors')
+      end
+    end
+  end
+
+  describe 'updating sections' do
+    before do
+      create(:admin, name: 'jonh', password: '123')
+      basic_authorize 'jonh', '123'
+    end
+
+    context 'passing required params' do
+      before do
+        section = create(:section)
+        subsection = create(:subsection, title: 'foosubsction', section: section)
+        put "/section/#{section.id}/subsections/#{subsection.id}", title: 'newsubsection', description: 'foo'
+      end
+
+      let(:data) { JSON.parse(last_response.body) }
+
+      it { expect(last_response.content_type).to eq 'application/json' }
+      it { expect(last_response.status).to be(200) }
+      it { expect(data).to_not include('errors') }
+
+      it 'contains section created' do
+        get '/section/1/subsections'
+        expect(last_response.body).to_not include('foosubsction')
+        expect(last_response.body).to_not include('newsubsction')
       end
     end
   end

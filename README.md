@@ -12,9 +12,9 @@ This api is the first step to construct the site.
 |home       | `/`                                  | GET                 | No                           |
 |version    | `/version`                           | GET                 | No                           |
 |users      | `/users`                             | GET/POST/DELETE     | Only admin                   |
-|sections   | `/sections`                          | GET/POST/DELETE     | admin/user: POST/DELETE      |
-|subsections| `/section/:sectionid/subsections`    | GET/POST/DELETE     | admin/user: POST/DELETE      |
-|projects   | `/projects`                          | GET/POST/PUT/DELETE | admin/user: POST/PUT/ DELETE |
+|sections   | `/sections`                          | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
+|subsections| `/section/:sectionid/subsections`    | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
+|projects   | `/projects`                          | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
 
 ## Endpoints examples
 It uses Basic Authentication so in order to manipulate some data you need
@@ -65,6 +65,11 @@ Creating:
 curl -XPOST https://awesome4girl-api.herokuapp.com/sections -u user:user -d'title=john&description=foo'
 ```
 
+Updating:
+```bash
+curl -XPUT https://awesome4girl-api.herokuapp.com/sections/:id -u user:user -d'title=john&description=foo'
+```
+
 Deleting:
 ```bash
 curl -XDELETE https://awesome4girl-api.herokuapp.com/sections/:id -u user:user
@@ -86,6 +91,11 @@ curl https://awesome4girl-api.herokuapp.com/section/1/subsections/1
 Creating:
 ```bash
 curl -XPOST https://awesome4girl-api.herokuapp.com/section/1/subsections -u user:user -d'title=john&description=foo'
+```
+
+Creating:
+```bash
+curl -XPUT https://awesome4girl-api.herokuapp.com/section/1/subsections/:id -u user:user -d'title=john&description=foo'
 ```
 
 Deleting:
@@ -112,7 +122,7 @@ curl https://awesome4girl-api.herokuapp.com/projects/1
 
 Creating:
 ```bash
-curl -XPOST https://awesome4girl-api.herokuapp.com/projects -u user:user -d'title=john&description=foo&language=pt'
+curl -XPOST https://awesome4girl-api.herokuapp.com/projects -u user:user -d'title=john&description=foo&language=pt&subsection=1'
 ```
 
 Deleting:
