@@ -5,5 +5,5 @@
 class SectionSerializer < BaseSerializer
   attributes :title, :description
 
-  has_many :subsections
+  has_many :subsections, include_links: false
 end

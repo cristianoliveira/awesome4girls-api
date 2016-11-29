@@ -5,9 +5,5 @@
 class SubsectionSerializer < BaseSerializer
   attributes :title, :description
 
-  has_many :projects
-
-  def self_link
-    super.to_s
-  end
+  has_many :projects, include_links: false
 end
