@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# This base controller for the api.
+# This the base controller for the api.
 # If the route responds Json it should inherit from it.
 #
 class ApiController < Sinatra::Base

@@ -10,13 +10,12 @@ This api is the first step to construct the site.
 | Data      | Route                                | Methods             | Restricted                   |
 |-----------|--------------------------------------|---------------------|------------------------------|
 |home       | `/`                                  | GET                 | No                           |
-|version    | `/version`                           | GET                 | No                           |
 |users      | `/users`                             | GET/POST/DELETE     | Only admin                   |
-|sections   | `/sections`                          | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
+|sections   | `/sections`                          | GET/POST/PUT/DELETE | user: POST/PUT/DELETE  |
 |subsections| `/sections/1/subsections`            | GET                 | No                           |
-|subsections| `/subsections`                       | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
-|subsections| `/subsections/1/projects`            | GET                 | No                           |
-|projects   | `/projects`                          | GET/POST/PUT/DELETE | admin/user: POST/PUT/DELETE  |
+|subsections| `/subsections`                       | GET/POST/PUT/DELETE | user: POST/PUT/DELETE  |
+|projects   | `/subsections/1/projects`            | GET                 | No                           |
+|projects   | `/projects`                          | GET/POST/PUT/DELETE | user: POST/PUT/DELETE  |
 
 ## Endpoints examples
 It uses Basic Authentication so in order to manipulate some data you need
