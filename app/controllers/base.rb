@@ -13,9 +13,3 @@ class ApiController < Sinatra::Base
     content_type :json
   end
 end
-
-require_relative 'main'
-require_relative 'users'
-require_relative 'sections'
-require_relative 'subsections'
-require_relative 'projects'

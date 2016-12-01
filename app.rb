@@ -9,10 +9,9 @@ require 'digest/md5'
 require 'json'
 require 'jsonapi-serializers'
 
-require_relative 'app/serializers/init'
-require_relative 'app/extensions/init'
-require_relative 'app/models/init'
-require_relative 'app/controllers/init'
+Dir.glob('./app/{extensions,serializers,models,controllers}/*.rb').each do |f|
+  require f
+end
 
 # The app routes.
 #
