@@ -18,10 +18,11 @@ gem 'puma'
 gem 'pg'
 
 gem 'sidekiq'
+
+gem 'rspec'
 gem 'kramdown'
 
 group :development, :test do
-  gem 'rspec'
   gem 'pry-byebug'
   gem 'sqlite3'
   gem 'annotate'
