@@ -17,6 +17,9 @@ gem 'puma'
 
 gem 'pg'
 
+gem 'sidekiq'
+gem 'kramdown'
+
 group :development, :test do
   gem 'rspec'
   gem 'pry-byebug'

@@ -9,9 +9,15 @@ require 'digest/md5'
 require 'json'
 require 'jsonapi-serializers'
 
-Dir.glob('./app/{extensions,serializers,models,controllers}/*.rb').each do |f|
-  require f
-end
+require 'sidekiq/web'
+require 'kramdown'
+
+Dir.glob('./app/workers/*.rb').each { |file| require file }
+Dir.glob('./app/components/*.rb').each { |file| require file }
+Dir.glob('./app/extensions/*.rb').each { |file| require file }
+Dir.glob('./app/serializers/*.rb').each { |file| require file }
+Dir.glob('./app/models/*.rb').each { |file| require file }
+Dir.glob('./app/controllers/*.rb').each { |file| require file }
 
 # The app routes.
 #
@@ -24,7 +30,9 @@ class App
       '/users' => UsersController,
       '/sections' => SectionsController,
       '/subsections' => SubsectionsController,
-      '/projects' => ProjectsController
+      '/projects' => ProjectsController,
+      '/sync' => SyncController,
+      '/workers' => Sidekiq::Web
     }
   end
 end
