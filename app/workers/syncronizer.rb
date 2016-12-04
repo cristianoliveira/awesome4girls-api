@@ -1,8 +1,3 @@
-require 'sidekiq'
-require 'net/http'
-require 'uri'
-
-
 # This a job worker to sincronize the database with repository
 class SincronizerWorker
   include Sidekiq::Worker

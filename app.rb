@@ -12,12 +12,15 @@ require 'jsonapi-serializers'
 require 'sidekiq/web'
 require 'kramdown'
 
+require_relative './config/sidekiq.rb'
+
 Dir.glob('./app/workers/*.rb').each { |file| require file }
 Dir.glob('./app/components/*.rb').each { |file| require file }
 Dir.glob('./app/extensions/*.rb').each { |file| require file }
 Dir.glob('./app/serializers/*.rb').each { |file| require file }
 Dir.glob('./app/models/*.rb').each { |file| require file }
 Dir.glob('./app/controllers/*.rb').each { |file| require file }
+
 
 # The app routes.
 #
