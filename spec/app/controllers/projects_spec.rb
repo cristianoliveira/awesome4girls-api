@@ -94,8 +94,8 @@ describe 'ProjectsController', type: :controller do
     it { expect(data.size).to eq(1) }
     it 'accepts optional params' do
       subsection = create(:subsection)
-      create(:project, subsection: subsection)
-      create(:project, subsection: subsection)
+      create(:project, title: "some", subsection: subsection)
+      create(:project, title: "other", subsection: subsection)
       create(:project)
 
       get "subsections/#{subsection.id}/projects"
