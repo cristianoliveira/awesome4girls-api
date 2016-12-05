@@ -7,15 +7,27 @@ a site where you can know more about the projects collected.
 This api is the first step to construct the site.
 
 ## Main Routes
+
+These are data routes.
+
 | Data      | Route                                | Methods             | Restricted                   |
 |-----------|--------------------------------------|---------------------|------------------------------|
 |home       | `/`                                  | GET                 | No                           |
-|users      | `/users`                             | GET/POST/DELETE     | Only admin                   |
-|sections   | `/sections`                          | GET/POST/PUT/DELETE | user: POST/PUT/DELETE  |
+|sections   | `/sections`                          | GET/POST/PUT/DELETE | user: POST/PUT/DELETE        |
 |subsections| `/sections/1/subsections`            | GET                 | No                           |
-|subsections| `/subsections`                       | GET/POST/PUT/DELETE | user: POST/PUT/DELETE  |
+|subsections| `/subsections`                       | GET/POST/PUT/DELETE | user: POST/PUT/DELETE        |
 |projects   | `/subsections/1/projects`            | GET                 | No                           |
-|projects   | `/projects`                          | GET/POST/PUT/DELETE | user: POST/PUT/DELETE  |
+|projects   | `/projects`                          | GET/POST/PUT/DELETE | user: POST/PUT/DELETE        |
+
+## Workers
+
+These are auxiliar routes with application meta info.
+
+| Data      | Route                                | Methods             | Restricted                   |
+|-----------|--------------------------------------|---------------------|------------------------------|
+|users      | `/users`                             | GET/POST/DELETE     | Only Admin                   |
+|action     | `/sync`                              | POST                | Only Admin                   |
+|dashboard  | `/workers`                           | GET/POST/PUT/DELETE | Only Admin                   |
 
 ## Endpoints examples
 It uses Basic Authentication so in order to manipulate some data you need
@@ -81,12 +93,12 @@ Subsections are related to sections.
 
 Listing is open and is not required an user
 ```bash
-curl https://awesome4girl-api.herokuapp.com/section/1/susections
+curl https://awesome4girl-api.herokuapp.com/sections/1/susections
 ```
 
 Get one:
 ```bash
-curl https://awesome4girl-api.herokuapp.com/section/1/subsections/1
+curl https://awesome4girl-api.herokuapp.com/sections/1/subsections/1
 ```
 
 Creating:
@@ -114,7 +126,7 @@ curl https://awesome4girl-api.herokuapp.com/projects
 
 Filtered by subsection:
 ```bash
-curl https://awesome4girl-api.herokuapp.com/subsection/1/projects
+curl https://awesome4girl-api.herokuapp.com/subsections/1/projects
 ```
 
 Get one:
