@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+
+# Gihub file client.
+#
+# Responsible to request files from github.
+#
 class GithubClient
   def initialize(repo, branch)
     @repo = repo

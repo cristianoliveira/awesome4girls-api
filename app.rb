@@ -8,6 +8,8 @@ require 'sinatra/param'
 require 'digest/md5'
 require 'json'
 require 'jsonapi-serializers'
+require 'uri'
+require 'net/http'
 
 require 'sidekiq/web'
 require 'kramdown'

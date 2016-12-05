@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+
+# Implements auth on Sidekiq::Web.
+#
+# When authenticated user has information about workers.
+#
 class WorkersController < Sidekiq::Web
   def initialize
     use(Rack::Auth::Basic) do |name, password|

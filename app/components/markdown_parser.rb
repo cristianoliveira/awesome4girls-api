@@ -72,7 +72,9 @@ module Kramdown
       end
 
       def extract_list(element)
-        element.children.map { |e| extract_p(e) }.inject({}) { |a, e| a.merge(e) }
+        element.children.map { |e| extract_p(e) }.inject({}) do |acc, elem|
+          acc.merge(elem)
+        end
       end
 
       def extract_p(element)
