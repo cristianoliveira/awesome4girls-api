@@ -2,19 +2,13 @@
 # frozen_string_literal: true
 require 'sinatra/activerecord'
 require 'sinatra/activerecord/rake'
+require 'rubocop/rake_task'
+require 'rspec/core/rake_task'
 
-begin
-  require 'rspec/core/rake_task'
-  RSpec::Core::RakeTask.new(:spec)
-rescue LoadError
-end
+RSpec::Core::RakeTask.new(:spec)
 
 task :rubocop do
-  begin
-    require 'rubocop/rake_task'
-    RuboCop::RakeTask.new
-  rescue LoadError
-  end
+  RuboCop::RakeTask.new
 end
 
 task default: :test

@@ -3,38 +3,36 @@
 source 'https://rubygems.org'
 ruby '2.3.3'
 
-gem 'sinatra'
-
-gem 'rake'
 gem 'activerecord'
+gem 'pg'
 
+gem 'jsonapi-serializers'
+gem 'kramdown'
+gem 'sidekiq'
+
+gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'sinatra-contrib'
 gem 'sinatra-param'
-gem 'jsonapi-serializers'
 
 gem 'puma'
-
-gem 'pg'
-
-gem 'sidekiq'
-
-gem 'rspec'
-gem 'kramdown'
+gem 'rake'
 
 group :development, :test do
   gem 'foreman'
+  gem 'rspec'
+
+  gem 'annotate'
 
   gem 'pry-byebug'
   gem 'sqlite3'
-  gem 'annotate'
 
   gem 'rack-test'
 
   # test data
+  gem 'database_cleaner'
   gem 'factory_girl'
   gem 'faker'
-  gem 'database_cleaner'
 
   # code style
   gem 'rubocop'

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class GithubClient
   def initialize(repo, branch)
     @repo = repo

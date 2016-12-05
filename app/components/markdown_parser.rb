@@ -17,7 +17,6 @@ module Kramdown
     #
     # It converts an Markdown in formatted data.
     class Data < Base
-
       def initialize(root, options)
         super(root, options)
         @sections = []
@@ -73,7 +72,7 @@ module Kramdown
       end
 
       def extract_list(element)
-        element.children.map{|e| extract_p(e) }.inject({}) {|a,e| a.merge(e) }
+        element.children.map { |e| extract_p(e) }.inject({}) { |a, e| a.merge(e) }
       end
 
       def extract_p(element)

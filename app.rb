@@ -14,14 +14,12 @@ require 'kramdown'
 
 require_relative './config/sidekiq.rb'
 
-
 Dir.glob(File.join(__dir__, 'app/workers/*.rb')).each { |file| require file }
 Dir.glob(File.join(__dir__, 'app/components/*.rb')).each { |file| require file }
 Dir.glob(File.join(__dir__, 'app/extensions/*.rb')).each { |file| require file }
 Dir.glob(File.join(__dir__, 'app/serializers/*.rb')).each { |file| require file }
 Dir.glob(File.join(__dir__, 'app/models/*.rb')).each { |file| require file }
 Dir.glob(File.join(__dir__, 'app/controllers/*.rb')).each { |file| require file }
-
 
 # The app routes.
 #
