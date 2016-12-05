@@ -23,6 +23,8 @@ gem 'rspec'
 gem 'kramdown'
 
 group :development, :test do
+  gem 'foreman'
+
   gem 'pry-byebug'
   gem 'sqlite3'
   gem 'annotate'

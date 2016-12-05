@@ -8,6 +8,9 @@ setup:
 run:
 	@bundle exec rackup -p 3000
 
+run-procfile:
+	foreman start
+
 testall: test style
 
 test:
