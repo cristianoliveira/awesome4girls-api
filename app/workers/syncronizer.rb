@@ -1,4 +1,6 @@
 # This a job worker to sincronize the database with repository
+require_relative '../../app'
+
 class SincronizerWorker
   include Sidekiq::Worker
 
@@ -45,7 +47,5 @@ end
 # This is an auxiliar way to run this code.
 # run it by: `ruby app/workers/syncronizer.rb`
 if __FILE__ == $0
-  require_relative '../../app'
-
   SincronizerWorker.new.perform
 end
