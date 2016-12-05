@@ -36,7 +36,7 @@ class App
       '/subsections' => SubsectionsController,
       '/projects' => ProjectsController,
       '/sync' => SyncController,
-      '/workers' => Sidekiq::Web
+      '/workers' => WorkersController
     }
   end
 end
