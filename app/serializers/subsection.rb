@@ -6,5 +6,5 @@ require_relative 'base'
 class SubsectionSerializer < BaseSerializer
   attributes :title, :description
 
-  has_many :projects, include_links: false
+  has_many :projects
 end

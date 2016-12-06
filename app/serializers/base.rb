@@ -8,4 +8,8 @@ class BaseSerializer
   def self_link
     super.to_s
   end
+
+  def relationship_self_link(name)
+    nil
+  end
 end

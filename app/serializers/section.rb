@@ -6,5 +6,5 @@ require_relative 'base'
 class SectionSerializer < BaseSerializer
   attributes :title, :description
 
-  has_many :subsections, include_links: false
+  has_many :subsections
 end
