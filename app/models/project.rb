@@ -26,6 +26,7 @@ class Project < ActiveRecord::Base
   belongs_to :author, class_name: 'User'
 
   validates :title, presence: true
+  validates :link, presence: true
   validates :description, presence: true
   validates :language, length: {
     maximum: 2,

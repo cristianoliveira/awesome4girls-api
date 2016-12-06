@@ -57,6 +57,7 @@ class SincronizerWorker
 
     if project
       project.update(title: item['link']['text'],
+                     link: item['link']['href'],
                      description: item['description'])
     else
       subsection.projects.create(title: item['link']['text'],

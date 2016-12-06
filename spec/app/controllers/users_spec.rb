@@ -2,11 +2,12 @@
 require 'spec_helper'
 
 describe 'UsersController', type: :controller do
+  let(:data) { JSON.parse(last_response.body) }
+
   describe 'authentication' do
     context 'without basic authentication' do
       describe 'get users' do
         before { get '/users' }
-        let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
@@ -15,7 +16,6 @@ describe 'UsersController', type: :controller do
 
       describe 'create users' do
         before { post '/users', name: 'roy', password: '123123', role: 1 }
-        let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
@@ -27,8 +27,6 @@ describe 'UsersController', type: :controller do
           create(:user, name: 'bob', password: '123')
           delete '/users/1'
         end
-
-        let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
@@ -43,7 +41,6 @@ describe 'UsersController', type: :controller do
 
         describe 'get users' do
           before { get '/users' }
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
@@ -52,7 +49,6 @@ describe 'UsersController', type: :controller do
 
         describe 'create users' do
           before { post '/users', name: 'roy', password: '123123', role: 1 }
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
@@ -65,7 +61,6 @@ describe 'UsersController', type: :controller do
             delete '/users/1'
           end
 
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
@@ -82,8 +77,6 @@ describe 'UsersController', type: :controller do
       get '/users'
     end
 
-    let(:data) { JSON.parse(last_response.body) }
-
     it { expect(last_response.content_type).to eq 'application/json' }
     it { expect(last_response.status).to be(200) }
     it { expect(last_response.body).to include('type') }
@@ -97,8 +90,6 @@ describe 'UsersController', type: :controller do
         basic_authorize 'jonh', '123'
         post '/users', name: 'roy', password: '123123', role: 1
       end
-
-      let(:data) { JSON.parse(last_response.body) }
 
       it { expect(last_response.content_type).to eq 'application/json' }
       it { expect(last_response.status).to be(200) }
@@ -115,8 +106,6 @@ describe 'UsersController', type: :controller do
         create(:admin, name: 'jonh', password: '123')
         basic_authorize 'jonh', '123'
       end
-
-      let(:data) { JSON.parse(last_response.body) }
 
       it 'validates name' do
         post '/users', password: '123123', role: 1

@@ -17,6 +17,7 @@
 FactoryGirl.define do
   factory :project, class: Project do
     title 'some title'
+    link 'http://somelink'
     description 'some awesome description'
 
     subsection

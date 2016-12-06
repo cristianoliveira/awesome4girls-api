@@ -4,6 +4,5 @@ require_relative 'base'
 # Serializer for section.
 #
 class ProjectSerializer < BaseSerializer
-  include JSONAPI::Serializer
-  attributes :title, :description, :language, :author
+  attributes :link, :title, :description, :language, :author
 end

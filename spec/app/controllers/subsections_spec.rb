@@ -2,13 +2,16 @@
 require 'spec_helper'
 
 describe 'SubsectionsController', type: :controller do
-  before { create(:subsection) }
+  let(:username) { 'jonh' }
+  let(:password) { '123123' }
+  let(:subsection) { create(:subsection) }
+  let(:section) { create(:section, title: 'foosection') }
+  let(:data) { JSON.parse(last_response.body) }
 
   describe 'authentication' do
     context 'without basic authentication' do
       describe 'get subsections' do
         before { get '/subsections' }
-        let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(200) }
@@ -20,8 +23,6 @@ describe 'SubsectionsController', type: :controller do
           post '/subsections', title: 'baz', description: 'foo'
         end
 
-        let(:data) { JSON.parse(last_response.body) }
-
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
         it { expect(data).to eq('errors' => 'Basic Authentication not provided.') }
@@ -29,24 +30,8 @@ describe 'SubsectionsController', type: :controller do
 
       describe 'update subsections' do
         before do
-          subsection = create(:subsection)
           put "/subsections/#{subsection.id}", title: 'baz', description: 'foo'
         end
-
-        let(:data) { JSON.parse(last_response.body) }
-
-        it { expect(last_response.content_type).to eq 'application/json' }
-        it { expect(last_response.status).to be(401) }
-        it { expect(data).to eq('errors' => 'Basic Authentication not provided.') }
-      end
-
-      describe 'delete subsections' do
-        before do
-          create(:subsection)
-          delete '/subsections/1'
-        end
-
-        let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
@@ -55,13 +40,12 @@ describe 'SubsectionsController', type: :controller do
 
       context 'with wrong credentials' do
         before do
-          create(:admin, name: 'jonh', password: '123')
-          basic_authorize 'jonh', '123qweqweq'
+          create(:admin, name: username, password: password)
+          basic_authorize username, "123#{password}"
         end
 
         describe 'get subsections' do
           before { get '/subsections' }
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(200) }
@@ -70,7 +54,6 @@ describe 'SubsectionsController', type: :controller do
 
         describe 'create sections' do
           before { post '/sections', title: 'roy', description: 'foo' }
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
@@ -79,10 +62,8 @@ describe 'SubsectionsController', type: :controller do
 
         describe 'update sections' do
           before do
-            subsection = create(:subsection)
             put "/subsections/#{subsection.id}", title: 'baz', description: 'foo'
           end
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
@@ -91,11 +72,8 @@ describe 'SubsectionsController', type: :controller do
 
         describe 'delete sections' do
           before do
-            section = create(:section, title: 'foosection')
             delete "/sections/#{section.id}"
           end
-
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
@@ -114,10 +92,9 @@ describe 'SubsectionsController', type: :controller do
       create(:admin, name: 'jonh', password: '123')
       basic_authorize 'jonh', '123'
       create(:subsection)
+      create(:subsection)
       get '/subsections'
     end
-
-    let(:data) { JSON.parse(last_response.body) }
 
     it { expect(last_response.content_type).to eq 'application/json' }
     it { expect(last_response.status).to be(200) }
@@ -138,8 +115,6 @@ describe 'SubsectionsController', type: :controller do
              title: 'foosection', description: 'some foo', section: section.id)
       end
 
-      let(:data) { JSON.parse(last_response.body) }
-
       it { expect(last_response.content_type).to eq 'application/json' }
       it { expect(last_response.status).to be(200) }
       it { expect(data).to_not include('errors') }
@@ -152,7 +127,6 @@ describe 'SubsectionsController', type: :controller do
 
     context 'without required params' do
       let(:section) { create(:section) }
-      let(:data) { JSON.parse(last_response.body) }
 
       it 'validates title' do
         post '/subsections', description: '123123', section: section.id
@@ -182,8 +156,6 @@ describe 'SubsectionsController', type: :controller do
             title: 'newsubsection', description: 'foo', section: section.id)
       end
 
-      let(:data) { JSON.parse(last_response.body) }
-
       it { expect(last_response.content_type).to eq 'application/json' }
       it { expect(last_response.status).to be(200) }
       it { expect(data).to_not include('errors') }
@@ -198,15 +170,13 @@ describe 'SubsectionsController', type: :controller do
 
   describe 'deleting sections' do
     before do
-      create(:admin, name: 'jonh', password: '123')
-      basic_authorize 'jonh', '123'
+      create(:admin, name: username, password: password)
+      basic_authorize username, password
 
       create(:subsection, title: 'baz')
       subsection = create(:subsection, title: 'foo')
       delete "/subsections/#{subsection.id}"
     end
-
-    let(:data) { JSON.parse(last_response.body) }
 
     it { expect(last_response.content_type).to eq 'application/json' }
     it { expect(last_response.status).to be(200) }

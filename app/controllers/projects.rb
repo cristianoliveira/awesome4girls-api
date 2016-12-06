@@ -25,6 +25,7 @@ class ProjectsController < ApiController
 
     subsection = Subsection.find(params[:subsection])
     project = subsection.projects.new(title: params[:title],
+                                      link: params[:link],
                                       description: params[:description],
                                       subsection: subsection,
                                       author_id: @user.id)

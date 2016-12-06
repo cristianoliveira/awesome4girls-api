@@ -2,11 +2,13 @@
 require 'spec_helper'
 
 describe 'ProjectsController', type: :controller do
+  let(:data) { JSON.parse(last_response.body) }
+
   describe 'authentication' do
     context 'without basic authentication' do
       describe 'get projects' do
+
         before { get '/projects' }
-        let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(200) }
@@ -15,7 +17,6 @@ describe 'ProjectsController', type: :controller do
 
       describe 'create projects' do
         before { post '/projects', title: 'baz', description: 'foo' }
-        let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
@@ -27,8 +28,6 @@ describe 'ProjectsController', type: :controller do
           create(:project)
           delete '/projects/1'
         end
-
-        let(:data) { JSON.parse(last_response.body) }
 
         it { expect(last_response.content_type).to eq 'application/json' }
         it { expect(last_response.status).to be(401) }
@@ -43,7 +42,6 @@ describe 'ProjectsController', type: :controller do
 
         describe 'get projects' do
           before { get '/projects' }
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(200) }
@@ -52,7 +50,6 @@ describe 'ProjectsController', type: :controller do
 
         describe 'create projects' do
           before { post '/projects', title: 'roy', description: 'foo' }
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
@@ -64,8 +61,6 @@ describe 'ProjectsController', type: :controller do
             project = create(:project, title: 'fooproject')
             delete "/projects/#{project.id}"
           end
-
-          let(:data) { JSON.parse(last_response.body) }
 
           it { expect(last_response.content_type).to eq 'application/json' }
           it { expect(last_response.status).to be(401) }
@@ -87,8 +82,6 @@ describe 'ProjectsController', type: :controller do
       get '/projects'
     end
 
-    let(:data) { JSON.parse(last_response.body) }
-
     it { expect(last_response.content_type).to eq 'application/json' }
     it { expect(last_response.status).to be(200) }
     it { expect(data.size).to eq(1) }
@@ -105,18 +98,20 @@ describe 'ProjectsController', type: :controller do
   end
 
   describe 'adding projects' do
+    let(:user)  { create(:admin, name: 'jonh', password: '123') }
+    let(:subsection) { create(:subsection) }
+
     before do
-      @user = create(:admin, name: 'jonh', password: '123')
-      basic_authorize 'jonh', '123'
-      @subsection = create(:subsection)
+      basic_authorize user.name, '123'
     end
 
     context 'passing required params' do
       before do
-        post '/projects', title: 'fooproject', description: 'some foo', subsection: @subsection.id
+        post '/projects', { title: 'fooproject',
+                            link: 'http://somlink',
+                            description: 'some foo',
+                            subsection: subsection.id }
       end
-
-      let(:data) { JSON.parse(last_response.body) }
 
       it { expect(last_response.content_type).to eq 'application/json' }
       it { expect(last_response.status).to be(200) }
@@ -129,13 +124,11 @@ describe 'ProjectsController', type: :controller do
 
       it 'uses the current user as author' do
         get '/projects'
-        expect(data['data'].first['attributes']['author']['id']).to eq(@user.id)
+        expect(data['data'].first['attributes']['author']['id']).to eq(user.id)
       end
     end
 
     context 'without required params' do
-      let(:data) { JSON.parse(last_response.body) }
-
       it 'validates title' do
         post '/projects', description: '123123'
         expect(last_response.status).to eq 400
@@ -143,13 +136,16 @@ describe 'ProjectsController', type: :controller do
       end
 
       it 'validates description' do
-        post '/projects', title: 'foo', subsection: @subsection.id
+        post '/projects', title: 'foo', subsection: subsection.id
         expect(last_response.status).to eq 400
         expect(data).to include('errors')
       end
 
       it 'accepts empty languages' do
-        post '/projects', title: 'foo', description: 'foodescription', subsection: @subsection.id
+        post '/projects', { title: 'foo',
+                            link: 'http://somlink',
+                            description: 'foodescription',
+                            subsection: subsection.id }
 
         expect(last_response.status).to eq 200
         expect(data).to_not include('errors')
@@ -158,15 +154,14 @@ describe 'ProjectsController', type: :controller do
   end
 
   describe 'deleting projects' do
+    let(:jonh) { create(:admin, name: 'jonh', password: '123') }
+
     before do
-      @jonh = create(:admin, name: 'jonh', password: '123')
       basic_authorize 'jonh', '123'
       create(:project, title: 'bazproject')
-      project = create(:project, title: 'fooproject', author_id: @jonh.id)
+      project = create(:project, title: 'fooproject', author_id: jonh.id)
       delete "/projects/#{project.id}"
     end
-
-    let(:data) { JSON.parse(last_response.body) }
 
     it { expect(last_response.content_type).to eq 'application/json' }
     it { expect(last_response.status).to be(200) }
@@ -181,7 +176,7 @@ describe 'ProjectsController', type: :controller do
     it 'validates the author when common user' do
       create(:user, name: 'bob', password: '123')
       basic_authorize 'bob', '123'
-      jonh_project = create(:project, author_id: @jonh.id)
+      jonh_project = create(:project, author_id: jonh.id)
       delete "/projects/#{jonh_project.id}"
 
       expect(last_response.content_type).to eq 'application/json'
@@ -192,7 +187,7 @@ describe 'ProjectsController', type: :controller do
     it 'accepts deletion of others when admin' do
       create(:admin, name: 'bob', password: '123')
       basic_authorize 'bob', '123'
-      jonh_project = create(:project, author_id: @jonh.id)
+      jonh_project = create(:project, author_id: jonh.id)
       delete "/projects/#{jonh_project.id}"
 
       expect(last_response.content_type).to eq 'application/json'
