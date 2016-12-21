@@ -24,7 +24,7 @@ class SubsectionsController < ApiController
 
   # POST /subsections?title=meetup&description=somedescription&section=1
   post '/' do
-    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
+    restricted_to!(User::ROLE_USER)
 
     param :section, Integer, required: true
     param :title, String, required: true
@@ -43,7 +43,7 @@ class SubsectionsController < ApiController
 
   # PUT /subsections/1?title=meetup&description=somedescription
   put '/:id' do
-    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
+    restricted_to!(User::ROLE_USER)
 
     param :title, String, required: true
     param :description, String
@@ -61,7 +61,7 @@ class SubsectionsController < ApiController
 
   # DELETE /subsections/1
   delete '/:id' do
-    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
+    restricted_to!(User::ROLE_USER)
 
     subsection = Subsection.find(params[:id])
 

@@ -17,7 +17,7 @@ class ProjectsController < ApiController
 
   # POST /projects?title=meetup&description=somedescription&lang=pt
   post '/' do
-    restricted_to!(User::ROLE_USER) { |name| @user = User.find_by_name(name) }
+    restricted_to! User::ROLE_USER
 
     param :title, String, required: true
     param :description, String, required: true
@@ -28,7 +28,7 @@ class ProjectsController < ApiController
                                       link: params[:link],
                                       description: params[:description],
                                       subsection: subsection,
-                                      author_id: @user.id)
+                                      author_id: current_user.id)
 
     if project.save
       jsonapi(project, is_collecion: false)
@@ -39,10 +39,11 @@ class ProjectsController < ApiController
 
   # DELETE /projects/1
   delete '/:id' do
-    restricted_to!(User::ROLE_USER) { |name| @user = User.find_by_name(name) }
+    restricted_to! User::ROLE_USER
+
     project = Project.find(params[:id])
 
-    if project.destroy_by(@user)
+    if project.destroy_by(current_user)
       json(message: 'project deleted.')
     else
       status = project.errors.include?(:not_allowed) ? 405 : 400

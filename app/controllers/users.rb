@@ -5,7 +5,8 @@
 class UsersController < ApiController
   before do
     content_type :json
-    restricted_to!(User::ROLE_ADMIN) { |name| User.find_by_name(name) }
+
+    restricted_to!(User::ROLE_ADMIN)
   end
 
   # GET /users/1

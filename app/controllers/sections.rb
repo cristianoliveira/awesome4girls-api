@@ -23,7 +23,8 @@ class SectionsController < ApiController
 
   # POST /sections?title=meetup&description=somedescription
   post '/' do
-    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
+    restricted_to!(User::ROLE_USER)
+
     param :title, String, required: true
     param :description, String
 
@@ -38,7 +39,7 @@ class SectionsController < ApiController
 
   # PUT /sections/:id?title=meetup&description=somedescription
   put '/:id' do
-    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
+    restricted_to!(User::ROLE_USER)
     param :title, String, required: true
     param :description, String
 
@@ -55,7 +56,7 @@ class SectionsController < ApiController
 
   # DELETE /sections/1
   delete '/:id' do
-    restricted_to!(User::ROLE_USER) { |name| User.find_by_name(name) }
+    restricted_to!(User::ROLE_USER)
     section = Section.find(params[:id])
 
     if section.destroy

@@ -11,12 +11,11 @@ module Sinatra
     class AuthenticationError < RuntimeError
     end
 
-    def restricted_to!(role)
+    def restricted!
       headers 'WWW-Authenticate' => 'Basic realm=member'
 
       name, pass = credentials(request)
-      user = yield(name)
-      authorized = user && user.auth?(pass) && user.is_a?(role)
+      authorized = yield(name, pass)
 
       raise AuthenticationError, 'User not authorized.' unless authorized
     end

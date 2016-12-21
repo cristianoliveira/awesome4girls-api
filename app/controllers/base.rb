@@ -12,4 +12,15 @@ class ApiController < Sinatra::Base
   before do
     content_type :json
   end
+
+  def restricted_to!(role)
+    restricted! do |name, pass|
+      @user = User.authenticate(name, pass, role)
+    end
+  end
+
+  def current_user
+    name, pass = credentials(request)
+    User.find_by_name(name)
+  end
 end

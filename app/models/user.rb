@@ -26,6 +26,11 @@ class User < ActiveRecord::Base
   ROLE_USER  = 2
   ROLE_GUEST = 3
 
+  def self.authenticate(name, pass, role)
+    user = find_by_name(name)
+    user && user.auth?(pass) && user.is_a?(role)
+  end
+
   def auth?(password)
     self.password == encrypted(password)
   end
